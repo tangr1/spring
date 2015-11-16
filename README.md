@@ -1,6 +1,6 @@
 # Topic Test
 
-### Prerequisites
+## Prerequisites
 
 Install the following tools before you continue:
 
