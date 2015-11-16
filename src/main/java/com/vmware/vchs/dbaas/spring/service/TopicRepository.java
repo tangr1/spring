@@ -7,13 +7,19 @@
 package com.vmware.vchs.dbaas.spring.service;
 
 import com.vmware.vchs.dbaas.spring.domain.Topic;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Component;
 
+@Component
+@CacheConfig(cacheNames = "topics")
 public interface TopicRepository extends PagingAndSortingRepository<Topic, Long> {
     Page<Topic> findByCategory(String category, Pageable pageable);
 
+    @Cacheable
     Page<Topic> findByUserId(Long userId, Pageable pageable);
 
     Page<Topic> findByUserIdAndCategory(Long userId, String category, Pageable pageable);
