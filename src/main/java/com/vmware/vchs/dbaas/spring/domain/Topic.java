@@ -22,7 +22,15 @@ public class Topic implements Serializable {
     @Column
     private Long reward = null;
     @Column
-    private TopicStatus status = TopicStatus.UNCONFIRMED;
+    private TopicStatus status = null;
+
+    public TopicStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TopicStatus status) {
+        this.status = status;
+    }
 
     public String getCategory() {
         return category;
@@ -73,7 +81,7 @@ public class Topic implements Serializable {
     }
 
     public enum TopicStatus {
-        UNCONFIRMED,
-        CONFIRMED,
+        unconfirmed,
+        confirmed,
     }
 }

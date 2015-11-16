@@ -5,7 +5,7 @@ spring:
 spring:
   profiles: dev
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.99.100:3306/spring

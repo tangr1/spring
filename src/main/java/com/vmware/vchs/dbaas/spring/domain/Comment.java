@@ -21,6 +21,14 @@ public class Comment {
     private Long replyId;
     private String body;
 
+    public Long getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Long replyId) {
+        this.replyId = replyId;
+    }
+
     public Long getId() {
         return id;
     }

@@ -24,6 +24,7 @@ public class TopicController {
     @ResponseBody
     @Transactional
     public Topic create(@RequestBody Topic topic) {
+        topic.setStatus(Topic.TopicStatus.unconfirmed);
         return topicRepository.save(topic);
     }
 
@@ -70,6 +71,12 @@ public class TopicController {
         }
         if (updated.getBody() != null) {
             topic.setBody(updated.getBody());
+        }
+        if (updated.getStatus() != null) {
+            topic.setStatus(updated.getStatus());
+        }
+        if (updated.getReward() != null) {
+            topic.setReward(updated.getReward());
         }
         topicRepository.save(topic);
         return topic;
