@@ -1,5 +1,5 @@
 spring:
-  profiles.active: dev
+  profiles.active: test
 
 ---
 spring:
@@ -22,3 +22,5 @@ spring:
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:bootexample;MODE=MySQL
+server:
+  port: 8090

@@ -1,6 +1,8 @@
 package com.vmware.vchs.dbaas.spring.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 // Don't use foreign key for easy migration to nosql
@@ -14,12 +16,14 @@ public class Topic implements Serializable {
     @Column(nullable = false)
     private Long userId = null;
     @Column(nullable = false)
+    @NotNull
     private String title = null;
     @Column
     private String body = null;
     @Column
     private String category = null;
     @Column
+    @Min(10)
     private Long reward = null;
     @Column
     private TopicStatus status = null;
