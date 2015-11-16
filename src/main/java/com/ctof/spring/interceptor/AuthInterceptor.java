@@ -1,4 +1,4 @@
-package com.vmware.vchs.dbaas.spring.interceptor;
+package com.ctof.spring.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

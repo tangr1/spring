@@ -4,11 +4,11 @@
  *  ******************************************************
  */
 
-package com.vmware.vchs.dbaas.spring.web;
+package com.ctof.spring.web;
 
-import com.vmware.vchs.dbaas.spring.domain.Comment;
-import com.vmware.vchs.dbaas.spring.exception.NotFoundException;
-import com.vmware.vchs.dbaas.spring.service.CommentRepository;
+import com.ctof.spring.service.CommentRepository;
+import com.ctof.spring.domain.Comment;
+import com.ctof.spring.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

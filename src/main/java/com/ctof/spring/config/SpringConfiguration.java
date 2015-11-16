@@ -1,6 +1,6 @@
-package com.vmware.vchs.dbaas.spring.config;
+package com.ctof.spring.config;
 
-import com.vmware.vchs.dbaas.spring.interceptor.AuthInterceptor;
+import com.ctof.spring.interceptor.AuthInterceptor;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;

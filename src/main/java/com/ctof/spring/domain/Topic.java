@@ -1,4 +1,4 @@
-package com.vmware.vchs.dbaas.spring.domain;
+package com.ctof.spring.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;

@@ -9,6 +9,12 @@ Install the following tools before you continue:
 
 ## Run
 
+Start web server
 ```
 gradle run
+```
+
+Insert data
+```
+curl -i -H "Content-type: application/json" localhost:8090/topics -d '{"title":"a", "body":"aaa", "userId":"101", "category":"frontend", "reward":10}'
 ```

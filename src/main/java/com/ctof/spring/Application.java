@@ -1,4 +1,4 @@
-package com.vmware.vchs.dbaas.spring;
+package com.ctof.spring;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

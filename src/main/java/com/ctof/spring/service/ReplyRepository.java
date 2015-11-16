@@ -1,6 +1,6 @@
-package com.vmware.vchs.dbaas.spring.service;
+package com.ctof.spring.service;
 
-import com.vmware.vchs.dbaas.spring.domain.Reply;
+import com.ctof.spring.domain.Reply;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;

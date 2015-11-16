@@ -4,9 +4,9 @@
  *  ******************************************************
  */
 
-package com.vmware.vchs.dbaas.spring.service;
+package com.ctof.spring.service;
 
-import com.vmware.vchs.dbaas.spring.domain.Topic;
+import com.ctof.spring.domain.Topic;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

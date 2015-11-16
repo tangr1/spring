@@ -4,7 +4,7 @@
  *  ******************************************************
  */
 
-package com.vmware.vchs.dbaas.spring.domain;
+package com.ctof.spring.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,21 +13,20 @@ import javax.persistence.Id;
 
 // Don't use foreign key for easy migration to nosql
 @Entity
-public class Reply {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long userId;
-    private Long topicId;
-    private String title;
+    private Long replyId;
     private String body;
 
-    public Long getTopicId() {
-        return topicId;
+    public Long getReplyId() {
+        return replyId;
     }
 
-    public void setTopicId(Long topicId) {
-        this.topicId = topicId;
+    public void setReplyId(Long replyId) {
+        this.replyId = replyId;
     }
 
     public Long getId() {
@@ -44,14 +43,6 @@ public class Reply {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getBody() {
