@@ -1,14 +1,10 @@
 package com.vmware.vchs.dbaas.spring.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
+// Don't use foreign key for easy migration to nosql
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Topic implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -21,6 +17,12 @@ public class Topic implements Serializable {
     private String title = null;
     @Column
     private String body = null;
+    @Column
+    private String category = null;
+    @Column
+    private Long reward = null;
+    @Column
+    private TopicStatus status = TopicStatus.UNCONFIRMED;
 
     public String getCategory() {
         return category;
@@ -37,15 +39,6 @@ public class Topic implements Serializable {
     public void setReward(Long reward) {
         this.reward = reward;
     }
-
-    @Column
-    private String category = null;
-    @Column
-    private Long reward = null;
-
-    // lazy loading...
-    @OneToMany(mappedBy = "topic")
-    private List<Reply> replies;
 
     public Long getId() {
         return id;
@@ -79,11 +72,8 @@ public class Topic implements Serializable {
         this.body = body;
     }
 
-    public List<Reply> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<Reply> replies) {
-        this.replies = replies;
+    public enum TopicStatus {
+        UNCONFIRMED,
+        CONFIRMED,
     }
 }

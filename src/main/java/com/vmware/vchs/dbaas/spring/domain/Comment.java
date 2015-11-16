@@ -6,35 +6,34 @@
 
 package com.vmware.vchs.dbaas.spring.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import javax.persistence.*;
-
+// Don't use foreign key for easy migration to nosql
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Comment {
-    public Reply getReply() {
-        return reply;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private Long userId;
+    private Long replyId;
+    private String body;
 
-    public void setReply(Reply reply) {
-        this.reply = reply;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -45,12 +44,4 @@ public class Comment {
     public void setBody(String body) {
         this.body = body;
     }
-
-    @ManyToOne
-    private Reply reply;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private long userId;
-    private String body;
 }

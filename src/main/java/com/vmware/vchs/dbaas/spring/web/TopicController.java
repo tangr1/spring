@@ -8,21 +8,17 @@ package com.vmware.vchs.dbaas.spring.web;
 
 import com.vmware.vchs.dbaas.spring.domain.Topic;
 import com.vmware.vchs.dbaas.spring.exception.NotFoundException;
-import com.vmware.vchs.dbaas.spring.service.ReplyRepository;
 import com.vmware.vchs.dbaas.spring.service.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class TopicController {
     @Autowired
     private TopicRepository topicRepository;
-    @Autowired
-    private ReplyRepository replyRepository;
 
     @RequestMapping(value = "/topics", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     @ResponseBody
@@ -34,12 +30,20 @@ public class TopicController {
     @RequestMapping(value = "/topics", method = RequestMethod.GET)
     @ResponseBody
     @Transactional(readOnly = true)
-    public List<Topic> list() {
-        List<Topic> topics = new ArrayList<>();
-        for (Topic topic : topicRepository.findAll()) {
-            topics.add(topic);
+    public Page<Topic> list(
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize,
+            @RequestParam(value = "userid", required = false) Long userId,
+            @RequestParam(value = "category", required = false) String category) {
+        if (userId != null && category != null) {
+            return topicRepository.findByUserIdAndCategory(userId, category, new PageRequest(page - 1, pageSize));
+        } else if (userId != null) {
+            return topicRepository.findByUserId(userId, new PageRequest(page - 1, pageSize));
+        } else if (category != null) {
+            return topicRepository.findByCategory(category, new PageRequest(page - 1, pageSize));
+        } else {
+            return topicRepository.findAll(new PageRequest(page - 1, pageSize));
         }
-        return topics;
     }
 
     @RequestMapping(value = "/topics/{id}", method = RequestMethod.GET)

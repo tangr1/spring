@@ -11,8 +11,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         /*
-        String aasToken = request.getHeader("aas-token");
-        if (aasToken == null || !aasToken.equals("vmware")) {
+        String token = request.getHeader("token");
+        if (token == null || !aasToken.equals("test-token")) {
             throw new UnAuthorizedException();
         }
         */
