@@ -21,5 +21,5 @@ curl -i -H "Content-type: application/json" localhost:8090/topics -d '{"title":"
 
 Query data
 ```
-curl -i -H "Content-type: application/json" localhost:8090/topics:userid=101&category=frontend
+curl -i -H "Content-type: application/json" localhost:8090/topics?userid=101&category=frontend
 ```
