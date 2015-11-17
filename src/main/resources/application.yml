@@ -1,26 +1,36 @@
 spring:
-  profiles.active: test
+  profiles.active: dev
 
 ---
 spring:
   profiles: dev
-  jpa:
-    hibernate.ddl-auto: update
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.99.100:3306/spring
+    url: jdbc:mysql://192.168.99.100:3306/ctof
     username: root
     password: password
+  jpa:
+    show-sql: true
+  jackson.serialization.INDENT_OUTPUT: true
 server:
   port: 8090
+  context-path: /api
+
+app.token.header: X-Auth-Token
+app.token.secret: ca$hc0w1!
 
 ---
 spring:
   profiles: test
-  jpa:
-    hibernate.ddl-auto: create-drop
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:bootexample;MODE=MySQL
+  jpa:
+    show-sql: true
+  jackson.serialization.INDENT_OUTPUT: true
 server:
   port: 8090
+  context-path: /api
+
+app.token.header: X-Auth-Token
+app.token.secret: ca$hc0w1!
