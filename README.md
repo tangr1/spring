@@ -14,12 +14,4 @@ Start web server
 gradle run
 ```
 
-Insert data
-```
-curl -i -H "Content-type: application/json" localhost:8090/topics -d '{"title":"a", "content":"aaa", "userId":"101", "category":"frontend", "ctocoins":10}'
-```
-
-Query data
-```
-curl -i -H "Content-type: application/json" localhost:8090/topics?userid=101&category=frontend
-```
+API is defined in api/api.yml, access http://editor.swagger.io/ to open it
