@@ -27,6 +27,8 @@ tags:
     description: 问答回复API
   - name: comment
     description: 主题或回复的评论API
+  - name: misc
+    description: 杂类API
 consumes:
   - application/json
 produces:
@@ -44,7 +46,7 @@ paths:
     post:
       summary: 用户登录
       description: |
-        通过用户名和密码获取token
+        通过邮件地址和密码获取token
       tags:
         - security
       parameters:
@@ -93,16 +95,28 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /sendmail/:
+    post:
+      summary: 发送邮件
+      description: |
+        发送邮件
+      tags:
+        - misc
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/EmailRequest'
+      responses:
+        200:
+          description: 成功发送
+
   /users/:
     get:
       summary: 查看用户列表
       description: |
         查看所有用户，支持分页和过滤器
-
-        一个空结果返回的例子
-        ```json
-        {"total":0, "page":1, "pageSize":20, "data":[]}
-        ```
       parameters:
         - name: page
           in: path
@@ -135,26 +149,11 @@ paths:
       tags:
         - user
       responses:
-        200:
-          description: 用户列表
+        200: &PageResponse
+          description: 资源列表
           schema:
-            properties:
-              total:
-                description: 用户总数
-                type: integer
-                minimum: 0
-              page:
-                description: 当前第几页
-                type: integer
-                minimum: 1
-              pageSize:
-                description: 每页最大的用户数
-                type: integer
-                minimum: 1
-              data:
-                type: array
-                items:
-                  $ref: '#/definitions/User'
+            $ref: '#/definitions/PagableResult'
+
     post:
       summary: 创建用户
       description: |
@@ -254,7 +253,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateUserRequest'
+            $ref: '#/definitions/User'
       responses:
         200:
           description: 成功更新用户
@@ -292,26 +291,7 @@ paths:
       tags:
         - startup
       responses:
-        200:
-          description: 创业公司列表
-          schema:
-            properties:
-              total:
-                description: 创业公司总数
-                type: integer
-                minimum: 0
-              page:
-                description: 当前第几页
-                type: integer
-                minimum: 1
-              pageSize:
-                description: 每页最大的创业公司数
-                type: integer
-                minimum: 1
-              data:
-                type: array
-                items:
-                  $ref: '#/definitions/Startup'
+        200: *PageResponse
     post:
       summary: 创建创业公司
       description: |
@@ -391,7 +371,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateStartupRequest'
+            $ref: '#/definitions/Startup'
       responses:
         200:
           description: 成功更新创业公司
@@ -435,26 +415,7 @@ paths:
       tags:
         - founder
       responses:
-        200:
-          description: 创始人列表
-          schema:
-            properties:
-              total:
-                description: 创始人总数
-                type: integer
-                minimum: 0
-              page:
-                description: 当前第几页
-                type: integer
-                minimum: 1
-              pageSize:
-                description: 每页最大的创始人数
-                type: integer
-                minimum: 1
-              data:
-                type: array
-                items:
-                  $ref: '#/definitions/Founder'
+        200: *PageResponse
     post:
       summary: 创建创始人
       description: |
@@ -534,7 +495,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateFounderRequest'
+            $ref: '#/definitions/Founder'
       responses:
         200:
           description: 成功更新创始人
@@ -583,26 +544,7 @@ paths:
       tags:
         - topic
       responses:
-        200:
-          description: 主题列表
-          schema:
-            properties:
-              total:
-                description: 主题总数
-                type: integer
-                minimum: 0
-              page:
-                description: 当前第几页
-                type: integer
-                minimum: 1
-              pageSize:
-                description: 每页最大的主题数
-                type: integer
-                minimum: 1
-              data:
-                type: array
-                items:
-                  $ref: '#/definitions/Topic'
+        200: *PageResponse
     post:
       summary: 创建主题
       description: |
@@ -678,7 +620,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateTopicRequest'
+            $ref: '#/definitions/Topic'
       responses:
         200:
           description: 成功更新主题
@@ -728,26 +670,7 @@ paths:
       tags:
         - reply
       responses:
-        200:
-          description: 回复列表
-          schema:
-            properties:
-              total:
-                description: 回复总数
-                type: integer
-                minimum: 0
-              page:
-                description: 当前第几页
-                type: integer
-                minimum: 1
-              pageSize:
-                description: 每页最大的回复数
-                type: integer
-                minimum: 1
-              data:
-                type: array
-                items:
-                  $ref: '#/definitions/Reply'
+        200: *PageResponse
     post:
       summary: 创建回复
       description: |
@@ -827,7 +750,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateReplyRequest'
+            $ref: '#/definitions/Reply'
       responses:
         200:
           description: 成功更新回复
@@ -878,26 +801,7 @@ paths:
       tags:
         - comment
       responses:
-        200:
-          description: 评论列表
-          schema:
-            properties:
-              total:
-                description: 评论总数
-                type: integer
-                minimum: 0
-              page:
-                description: 当前第几页
-                type: integer
-                minimum: 1
-              pageSize:
-                description: 每页最大的评论数
-                type: integer
-                minimum: 1
-              data:
-                type: array
-                items:
-                  $ref: '#/definitions/Comment'
+        200: *PageResponse
     post:
       summary: 创建评论
       description: |
@@ -973,7 +877,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateCommentRequest'
+            $ref: '#/definitions/Comment'
       responses:
         200:
           description: 成功更新评论
@@ -990,15 +894,18 @@ definitions:
     description:
       表示认证请求
     required:
-      - username
+      - email
       - password
     properties:
-      username:
-        description: 用户名
+      email:
+        description: 用户注册的email地址
         type: string
       password:
         description: 密码，需加密，不可明文传输
         type: string
+      expiredTime:
+        description: token失效时间, 单位为分钟
+        type: integer
 
   AuthenticationResponse:
     description:
@@ -1007,6 +914,34 @@ definitions:
       token:
         description: 访问token
         type: string
+      expiresIn:
+        description: token失效时间
+        type: string
+
+  PagableResult:
+    description: 资源列表的一页结果
+    properties:
+      totalPages:
+        description: 总共页数
+        type: integer
+      totalElements:
+        description: 总共资源项数
+        type: integer
+      last:
+        description: 是否最后一页
+        type: boolean
+      last:
+        description: 是否第一页
+        type: boolean
+      size:
+        description: 每页资源项数
+        type: integer
+      number:
+        description: 当前页数
+        type: integer
+      numberOfElements:
+        description: 当前页资源项数
+        type: integer
 
   User:
     description:
@@ -1155,6 +1090,10 @@ definitions:
         description: 主题发布者
         type: integer
         format: int64
+      startupId:
+        description: 主题发布者所属创业公司
+        type: integer
+        format: int64
       title:
         description: 主题标题
         type: string
@@ -1163,6 +1102,9 @@ definitions:
         type: string
       ctocoins:
         description: 主题悬赏分
+        type: string
+      category:
+        description: 主题类别
         type: string
       confirmed:
         description: 主题是否已有回复被发布者采纳

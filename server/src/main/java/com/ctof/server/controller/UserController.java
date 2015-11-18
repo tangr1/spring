@@ -34,9 +34,13 @@ public class UserController {
     @Transactional(readOnly = true)
     public Page<User> list(
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize,
-            @RequestParam(value = "startupid", required = true) Long startupId) {
-        return userRepository.findByStartupId(startupId, new PageRequest(page - 1, pageSize));
+            @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+            @RequestParam(value = "startupId", required = true) Long startupId) {
+        if (startupId != null) {
+            return userRepository.findByStartupId(startupId, new PageRequest(page - 1, pageSize));
+        } else {
+            return userRepository.findAll(new PageRequest(page - 1, pageSize));
+        }
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)

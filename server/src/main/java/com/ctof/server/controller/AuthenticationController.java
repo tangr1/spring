@@ -3,6 +3,7 @@ package com.ctof.server.controller;
 import com.ctof.server.api.AuthenticationRequest;
 import com.ctof.server.api.AuthenticationResponse;
 import com.ctof.server.token.TokenService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,19 +37,20 @@ public class AuthenticationController {
         // Perform the authentication
         Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
+                        authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Reload password post-authentication so we can generate token
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         String token = this.tokenService.generateToken(userDetails);
 
         // Return the token
         AuthenticationResponse response = new AuthenticationResponse();
         response.setToken(token);
+        response.setExpiresIn(DateTime.now().plusMinutes(authenticationRequest.getExpiredTime()));
         return ResponseEntity.ok(response);
     }
 

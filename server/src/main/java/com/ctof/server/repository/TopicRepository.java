@@ -23,6 +23,4 @@ public interface TopicRepository extends PagingAndSortingRepository<Topic, Long>
     Page<Topic> findByUserId(Long userId, Pageable pageable);
 
     Page<Topic> findByUserIdAndCategory(Long userId, String category, Pageable pageable);
-
-    Page<Topic> findAll(Pageable pageable);
 }

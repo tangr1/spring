@@ -7,14 +7,16 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.99.100:3306/ctof
-    username: root
+    email: root
     password: password
   jpa:
     show-sql: true
   jackson.serialization.INDENT_OUTPUT: true
 server:
   port: 8090
-  context-path: /api
+  context-path: /api/v1
+
+#logging.level.org.springframework.web: DEBUG
 
 app.token.header: X-Auth-Token
 app.token.secret: ca$hc0w1!
@@ -30,7 +32,7 @@ spring:
   jackson.serialization.INDENT_OUTPUT: true
 server:
   port: 8090
-  context-path: /api
+  context-path: /api/v1
 
 app.token.header: X-Auth-Token
 app.token.secret: ca$hc0w1!

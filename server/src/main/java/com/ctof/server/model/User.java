@@ -1,7 +1,5 @@
 package com.ctof.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -55,7 +53,6 @@ public class User extends BaseModel {
     }
 
     @Column
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
