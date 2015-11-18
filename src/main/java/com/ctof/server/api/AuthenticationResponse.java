@@ -1,4 +1,4 @@
-package com.ctof.server.model;
+package com.ctof.server.api;
 
 import java.io.Serializable;
 

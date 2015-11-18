@@ -6,8 +6,8 @@
 
 package com.ctof.server.controller;
 
-import com.ctof.server.model.Founder;
 import com.ctof.server.exception.NotFoundException;
+import com.ctof.server.model.Founder;
 import com.ctof.server.model.Startup;
 import com.ctof.server.repository.FounderRepository;
 import com.ctof.server.repository.StartupRepository;

@@ -1,29 +1,44 @@
 package com.ctof.server.model;
 
-import javax.persistence.*;
+import com.ctof.server.model.converter.StringArrayToStringConverter;
+
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "topics")
 public class Topic extends BaseModel {
+    @NotNull
     private Long userId = null;
     @NotNull
     private String title = null;
-    private String body = null;
+    private String content = null;
     private String category = null;
     @Min(10)
-    private Long reward = null;
-    private TopicStatus status = null;
+    private Long ctocoins = null;
+    private Boolean confirmed = null;
+    private String[] labels = null;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    public TopicStatus getStatus() {
-        return status;
+    public Boolean getConfirmed() {
+        return confirmed;
     }
 
-    public void setStatus(TopicStatus status) {
-        this.status = status;
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    @Convert(converter = StringArrayToStringConverter.class)
+    public String[] getLabels() {
+        return labels;
+    }
+
+    public void setLabels(String[] labels) {
+        this.labels = labels;
     }
 
     @Column
@@ -36,12 +51,12 @@ public class Topic extends BaseModel {
     }
 
     @Column
-    public Long getReward() {
-        return reward;
+    public Long getCtocoins() {
+        return ctocoins;
     }
 
-    public void setReward(Long reward) {
-        this.reward = reward;
+    public void setCtocoins(Long ctocoins) {
+        this.ctocoins = ctocoins;
     }
 
     @Column
@@ -63,16 +78,11 @@ public class Topic extends BaseModel {
     }
 
     @Column
-    public String getBody() {
-        return body;
+    public String getContent() {
+        return content;
     }
 
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public enum TopicStatus {
-        unconfirmed,
-        confirmed,
+    public void setContent(String content) {
+        this.content = content;
     }
 }

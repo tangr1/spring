@@ -1,7 +1,7 @@
 package com.ctof.server.controller;
 
-import com.ctof.server.model.AuthenticationRequest;
-import com.ctof.server.model.AuthenticationResponse;
+import com.ctof.server.api.AuthenticationRequest;
+import com.ctof.server.api.AuthenticationResponse;
 import com.ctof.server.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

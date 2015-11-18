@@ -4,7 +4,7 @@
  * ******************************************************
  */
 
-package com.ctof.server.model;
+package com.ctof.server.model.converter;
 
 import org.joda.time.DateTime;
 

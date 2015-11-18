@@ -6,8 +6,8 @@
 
 package com.ctof.server.controller;
 
-import com.ctof.server.model.Topic;
 import com.ctof.server.exception.NotFoundException;
+import com.ctof.server.model.Topic;
 import com.ctof.server.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,7 @@ public class TopicController {
     @ResponseBody
     @Transactional
     public Topic create(@RequestBody Topic topic) {
-        topic.setStatus(Topic.TopicStatus.unconfirmed);
+        topic.setConfirmed(false);
         return topicRepository.save(topic);
     }
 
@@ -69,14 +69,14 @@ public class TopicController {
         if (updated.getTitle() != null) {
             topic.setTitle(updated.getTitle());
         }
-        if (updated.getBody() != null) {
-            topic.setBody(updated.getBody());
+        if (updated.getContent() != null) {
+            topic.setContent(updated.getContent());
         }
-        if (updated.getStatus() != null) {
-            topic.setStatus(updated.getStatus());
+        if (updated.getConfirmed() != null) {
+            topic.setConfirmed(updated.getConfirmed());
         }
-        if (updated.getReward() != null) {
-            topic.setReward(updated.getReward());
+        if (updated.getCtocoins() != null) {
+            topic.setCtocoins(updated.getCtocoins());
         }
         topicRepository.save(topic);
         return topic;

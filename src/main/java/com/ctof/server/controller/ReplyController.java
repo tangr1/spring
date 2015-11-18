@@ -6,8 +6,8 @@
 
 package com.ctof.server.controller;
 
-import com.ctof.server.model.Reply;
 import com.ctof.server.exception.NotFoundException;
+import com.ctof.server.model.Reply;
 import com.ctof.server.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,8 +59,8 @@ public class ReplyController {
         if (updated.getTitle() != null) {
             reply.setTitle(updated.getTitle());
         }
-        if (updated.getBody() != null) {
-            reply.setBody(updated.getBody());
+        if (updated.getContent() != null) {
+            reply.setContent(updated.getContent());
         }
         replyRepository.save(reply);
         return reply;

@@ -6,6 +6,7 @@
 
 package com.ctof.server.model;
 
+import com.ctof.server.model.converter.DateToDateTimeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 
@@ -34,6 +35,7 @@ public abstract class BaseModel {
     public Long getId() {
         return id;
     }
+
     private void setId(Long id) {
         this.id = id;
     }
@@ -44,6 +46,7 @@ public abstract class BaseModel {
     public DateTime getCreateTime() {
         return createTime;
     }
+
     public void setCreateTime(DateTime createTime) {
         this.createTime = createTime;
     }
@@ -54,6 +57,7 @@ public abstract class BaseModel {
     public DateTime getModifyTime() {
         return modifyTime;
     }
+
     public void setModifyTime(DateTime modifyTime) {
         this.modifyTime = modifyTime;
     }

@@ -6,8 +6,8 @@
 
 package com.ctof.server.controller;
 
-import com.ctof.server.model.User;
 import com.ctof.server.exception.NotFoundException;
+import com.ctof.server.model.User;
 import com.ctof.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,0 +1,1263 @@
+swagger: "2.0"
+info:
+  title: CtoFunds REST API
+  description: |
+    定义CtoFunds服务端的API，REST风格，包括请求响应URI、状态和报文格式
+  version: "1.0"
+  contact:
+    name: 唐睿
+    email: "tangrui@ctofunds.com"
+host: www.ctofunds.com
+schemes:
+  - https
+  - http
+basePath: /api/v1
+tags:
+  - name: security
+    description: 安全相关API
+  - name: user
+    description: 用户API
+  - name: startup
+    description: 创业公司API
+  - name: founder
+    description: 创业公司创始人API，只是创业公司元信息的一部分，并不是用户
+  - name: topic
+    description: 问答主题API
+  - name: reply
+    description: 问答回复API
+  - name: comment
+    description: 主题或回复的评论API
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  token:
+    description: 通过登录/login得到的JWT token
+    type: apiKey
+    name: X-AUTH-TOKEN
+    in: header
+security:
+  - token: []
+paths:
+  /login/:
+    post:
+      summary: 用户登录
+      description: |
+        通过用户名和密码获取token
+      tags:
+        - security
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AuthenticationRequest'
+      responses:
+        200:
+          description: 成功获取token
+          schema:
+            $ref: '#/definitions/AuthenticationResponse'
+        401:
+          description: 用户名或密码有问题
+          schema:
+            $ref: '#/definitions/Error'
+
+  /logout/:
+    post:
+      summary: 用户登出
+      description: |
+        用户登出，使token无效
+      tags:
+        - security
+      responses:
+        200:
+          description: 成功登出
+        400:
+          description: token无效
+          schema:
+            $ref: '#/definitions/Error'
+
+  /refresh/:
+    post:
+      summary: 刷新token
+      description: |
+        在token的有效时间内刷新token
+      tags:
+        - security
+      responses:
+        200:
+          description: 成功刷新token
+        400:
+          description: token无效
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/:
+    get:
+      summary: 查看用户列表
+      description: |
+        查看所有用户，支持分页和过滤器
+
+        一个空结果返回的例子
+        ```json
+        {"total":0, "page":1, "pageSize":20, "data":[]}
+        ```
+      parameters:
+        - name: page
+          in: path
+          description: 当前页码
+          required: true
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: path
+          description: 每页项数
+          required: true
+          type: integer
+          minimum: 1
+        - name: startupId
+          in: path
+          description: 创业公司ID
+          required: false
+          type: integer
+          format: int64
+        - name: name
+          in: path
+          description: 用户姓名
+          required: false
+          type: string
+        - name: role
+          in: path
+          description: 用户角色类型
+          required: false
+          type: string
+      tags:
+        - user
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              total:
+                description: 用户总数
+                type: integer
+                minimum: 0
+              page:
+                description: 当前第几页
+                type: integer
+                minimum: 1
+              pageSize:
+                description: 每页最大的用户数
+                type: integer
+                minimum: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+    post:
+      summary: 创建用户
+      description: |
+        根据请求创建用户
+      tags:
+        - user
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: 成功创建用户
+          schema:
+            $ref: '#/definitions/User'
+        400: &400
+          description: 无效请求
+          schema:
+            $ref: '#/definitions/Error'
+        401: &401
+          description: 未认证
+          schema:
+            $ref: '#/definitions/Error'
+        403: &403
+          description: 无访问权限
+          schema:
+            $ref: '#/definitions/Error'
+        500: &500
+          description: 服务端内部错误
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/{id}/:
+    get:
+      summary: 查询用户
+      description: |
+        得到指定用户的具体信息
+      tags:
+        - user
+      parameters:
+        - &UserIdPara
+          name: id
+          in: path
+          description: 用户ID
+          required: true
+          type: integer
+          format: int64
+      tags:
+        - user
+      responses:
+        200:
+          description: 成功查询用户
+          schema:
+            $ref: '#/definitions/User'
+        404: &404
+          description: 没找到指定对象
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 删除用户
+      description: |
+        删除指定用户，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - user
+      parameters:
+        - *UserIdPara
+      responses:
+        200:
+          description: 成功删除用户
+          schema:
+            $ref: '#/definitions/User'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新用户
+      description: |
+        根据请求中指定要更新的属性对用户进行更新
+
+        Example:
+        1. 更新用户姓名和邮件
+            ```json
+            {
+              "name":"newName",
+              "email": "new@email.com"
+            }
+            ```
+      tags:
+        - user
+      parameters:
+        - *UserIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateUserRequest'
+      responses:
+        200:
+          description: 成功更新用户
+          schema:
+            $ref: '#/definitions/User'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+
+  /startups/:
+    get:
+      summary: 查看创业公司列表
+      description: |
+        查看所有创业公司，支持分页和过滤器
+      parameters:
+        - name: page
+          in: path
+          description: 当前页码
+          required: true
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: path
+          description: 每页项数
+          required: true
+          type: integer
+          minimum: 1
+        - name: name
+          in: path
+          description: 创业公司名称
+          required: false
+          type: string
+      tags:
+        - startup
+      responses:
+        200:
+          description: 创业公司列表
+          schema:
+            properties:
+              total:
+                description: 创业公司总数
+                type: integer
+                minimum: 0
+              page:
+                description: 当前第几页
+                type: integer
+                minimum: 1
+              pageSize:
+                description: 每页最大的创业公司数
+                type: integer
+                minimum: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Startup'
+    post:
+      summary: 创建创业公司
+      description: |
+        根据请求创建创业公司
+      tags:
+        - startup
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Startup'
+      responses:
+        201:
+          description: 成功创建创业公司
+          schema:
+            $ref: '#/definitions/Startup'
+        400: *400
+        401: *401
+        403: *403
+        500: *500
+
+  /startups/{id}/:
+    get:
+      summary: 查询创业公司
+      description: |
+        得到指定创业公司的具体信息
+      tags:
+        - startup
+      parameters:
+        - &StartupIdPara
+          name: id
+          in: path
+          description: 创业公司ID
+          required: true
+          type: integer
+          format: int64
+      tags:
+        - startup
+      responses:
+        200:
+          description: 成功查询创业公司
+          schema:
+            $ref: '#/definitions/Startup'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    delete:
+      summary: 删除创业公司
+      description: |
+        删除指定创业公司，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - startup
+      parameters:
+        - *StartupIdPara
+      responses:
+        200:
+          description: 成功删除创业公司
+          schema:
+            $ref: '#/definitions/Startup'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新创业公司
+      description: |
+        根据请求中指定要更新的属性对创业公司进行更新
+      tags:
+        - startup
+      parameters:
+        - *StartupIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateStartupRequest'
+      responses:
+        200:
+          description: 成功更新创业公司
+          schema:
+            $ref: '#/definitions/Startup'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+
+  /founders/:
+    get:
+      summary: 查看创始人列表
+      description: |
+        查看所有创始人，支持分页和过滤器
+      parameters:
+        - name: page
+          in: path
+          description: 当前页码
+          required: true
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: path
+          description: 每页项数
+          required: true
+          type: integer
+          minimum: 1
+        - name: name
+          in: path
+          description: 创始人名称
+          required: false
+          type: string
+        - name: startupId
+          in: path
+          description: 创业公司ID
+          required: false
+          type: integer
+          format: int64
+      tags:
+        - founder
+      responses:
+        200:
+          description: 创始人列表
+          schema:
+            properties:
+              total:
+                description: 创始人总数
+                type: integer
+                minimum: 0
+              page:
+                description: 当前第几页
+                type: integer
+                minimum: 1
+              pageSize:
+                description: 每页最大的创始人数
+                type: integer
+                minimum: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Founder'
+    post:
+      summary: 创建创始人
+      description: |
+        根据请求创建创始人
+      tags:
+        - founder
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Founder'
+      responses:
+        201:
+          description: 成功创建创始人
+          schema:
+            $ref: '#/definitions/Founder'
+        400: *400
+        401: *401
+        403: *403
+        500: *500
+
+  /founders/{id}/:
+    get:
+      summary: 查询创始人
+      description: |
+        得到指定创始人的具体信息
+      tags:
+        - founder
+      parameters:
+        - &FounderIdPara
+          name: id
+          in: path
+          description: 创始人ID
+          required: true
+          type: integer
+          format: int64
+      tags:
+        - founder
+      responses:
+        200:
+          description: 成功查询创始人
+          schema:
+            $ref: '#/definitions/Founder'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    delete:
+      summary: 删除创始人
+      description: |
+        删除指定创始人，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - founder
+      parameters:
+        - *FounderIdPara
+      responses:
+        200:
+          description: 成功删除创始人
+          schema:
+            $ref: '#/definitions/Founder'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新创始人
+      description: |
+        根据请求中指定要更新的属性对创始人进行更新
+      tags:
+        - founder
+      parameters:
+        - *FounderIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateFounderRequest'
+      responses:
+        200:
+          description: 成功更新创始人
+          schema:
+            $ref: '#/definitions/Founder'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+
+  /topics/:
+    get:
+      summary: 查看主题列表
+      description: |
+        查看所有主题，支持分页和过滤器
+      parameters:
+        - name: page
+          in: path
+          description: 当前页码
+          required: true
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: path
+          description: 每页项数
+          required: true
+          type: integer
+          minimum: 1
+        - name: userId
+          in: path
+          description: 主题发布者ID
+          required: false
+          type: integer
+          format: int64
+        - name: title
+          in: path
+          description: 主题标题
+          required: false
+          type: string
+        - name: category
+          in: path
+          description: 主题类别
+          required: false
+          type: string
+      tags:
+        - topic
+      responses:
+        200:
+          description: 主题列表
+          schema:
+            properties:
+              total:
+                description: 主题总数
+                type: integer
+                minimum: 0
+              page:
+                description: 当前第几页
+                type: integer
+                minimum: 1
+              pageSize:
+                description: 每页最大的主题数
+                type: integer
+                minimum: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Topic'
+    post:
+      summary: 创建主题
+      description: |
+        根据请求创建主题
+      tags:
+        - topic
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Topic'
+      responses:
+        201:
+          description: 成功创建主题
+          schema:
+            $ref: '#/definitions/Topic'
+        400: *400
+        401: *401
+        403: *403
+        500: *500
+
+  /topics/{id}/:
+    get:
+      summary: 查询主题
+      description: |
+        得到指定主题的具体信息
+      tags:
+        - topic
+      parameters:
+        - &TopicIdPara
+          name: id
+          in: path
+          description: 主题ID
+          required: true
+          type: integer
+          format: int64
+      tags:
+        - topic
+      responses:
+        200:
+          description: 成功查询主题
+          schema:
+            $ref: '#/definitions/Topic'
+        404: *404
+    delete:
+      summary: 删除主题
+      description: |
+        删除指定主题，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - topic
+      parameters:
+        - *TopicIdPara
+      responses:
+        200:
+          description: 成功删除主题
+          schema:
+            $ref: '#/definitions/Topic'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新主题
+      description: |
+        根据请求中指定要更新的属性对主题进行更新
+      tags:
+        - topic
+      parameters:
+        - *TopicIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateTopicRequest'
+      responses:
+        200:
+          description: 成功更新主题
+          schema:
+            $ref: '#/definitions/Topic'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+
+  /replies/:
+    get:
+      summary: 查看回复列表
+      description: |
+        查看所有回复，支持分页和过滤器
+      parameters:
+        - name: page
+          in: path
+          description: 当前页码
+          required: true
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: path
+          description: 每页项数
+          required: true
+          type: integer
+          minimum: 1
+        - name: title
+          in: path
+          description: 回复标题
+          required: false
+          type: string
+        - name: userId
+          in: path
+          description: 回复发布者ID
+          required: false
+          type: integer
+          format: int64
+        - name: topicId
+          in: path
+          description: 回复的主题ID
+          required: false
+          type: integer
+          format: int64
+      tags:
+        - reply
+      responses:
+        200:
+          description: 回复列表
+          schema:
+            properties:
+              total:
+                description: 回复总数
+                type: integer
+                minimum: 0
+              page:
+                description: 当前第几页
+                type: integer
+                minimum: 1
+              pageSize:
+                description: 每页最大的回复数
+                type: integer
+                minimum: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Reply'
+    post:
+      summary: 创建回复
+      description: |
+        根据请求创建回复
+      tags:
+        - reply
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Reply'
+      responses:
+        201:
+          description: 成功创建回复
+          schema:
+            $ref: '#/definitions/Reply'
+        400: *400
+        401: *401
+        403: *403
+        500: *500
+
+  /replies/{id}/:
+    get:
+      summary: 查询回复
+      description: |
+        得到指定回复的具体信息
+      tags:
+        - reply
+      parameters:
+        - &ReplyIdPara
+          name: id
+          in: path
+          description: 回复ID
+          required: true
+          type: integer
+          format: int64
+      tags:
+        - reply
+      responses:
+        200:
+          description: 成功查询回复
+          schema:
+            $ref: '#/definitions/Reply'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    delete:
+      summary: 删除回复
+      description: |
+        删除指定回复，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - reply
+      parameters:
+        - *ReplyIdPara
+      responses:
+        200:
+          description: 成功删除回复
+          schema:
+            $ref: '#/definitions/Reply'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新回复
+      description: |
+        根据请求中指定要更新的属性对回复进行更新
+      tags:
+        - reply
+      parameters:
+        - *ReplyIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateReplyRequest'
+      responses:
+        200:
+          description: 成功更新回复
+          schema:
+            $ref: '#/definitions/Reply'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+
+  /comments/:
+    get:
+      summary: 查看评论列表
+      description: |
+        查看所有评论，支持分页和过滤器
+      parameters:
+        - name: page
+          in: path
+          description: 当前页码
+          required: true
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: path
+          description: 每页项数
+          required: true
+          type: integer
+          minimum: 1
+        - name: userId
+          in: path
+          description: 评论发布者ID
+          required: false
+          type: integer
+          format: int64
+        - name: topicId
+          in: path
+          description: 评论的主题ID
+          required: false
+          type: integer
+          format: int64
+        - name: topicId
+          in: path
+          description: 评论的回复ID
+          required: false
+          type: integer
+          format: int64
+      tags:
+        - comment
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              total:
+                description: 评论总数
+                type: integer
+                minimum: 0
+              page:
+                description: 当前第几页
+                type: integer
+                minimum: 1
+              pageSize:
+                description: 每页最大的评论数
+                type: integer
+                minimum: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Comment'
+    post:
+      summary: 创建评论
+      description: |
+        根据请求创建评论
+      tags:
+        - comment
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Comment'
+      responses:
+        201:
+          description: 成功创建评论
+          schema:
+            $ref: '#/definitions/Comment'
+        400: *400
+        401: *401
+        403: *403
+        500: *500
+
+  /comments/{id}/:
+    get:
+      summary: 查询评论
+      description: |
+        得到指定评论的具体信息
+      tags:
+        - comment
+      parameters:
+        - &CommentIdPara
+          name: id
+          in: path
+          description: 评论ID
+          required: true
+          type: integer
+          format: int64
+      tags:
+        - comment
+      responses:
+        200:
+          description: 成功查询评论
+          schema:
+            $ref: '#/definitions/Comment'
+        404: *404
+    delete:
+      summary: 删除评论
+      description: |
+        删除指定评论，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - comment
+      parameters:
+        - *CommentIdPara
+      responses:
+        200:
+          description: 成功删除评论
+          schema:
+            $ref: '#/definitions/Comment'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新评论
+      description: |
+        根据请求中指定要更新的属性对评论进行更新
+
+        Example:
+        1. 更新评论姓名和邮件
+            ```json
+            {
+              "name":"newName",
+              "email": "new@email.com"
+            }
+            ```
+      tags:
+        - comment
+      parameters:
+        - *CommentIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateCommentRequest'
+      responses:
+        200:
+          description: 成功更新评论
+          schema:
+            $ref: '#/definitions/Comment'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+
+definitions:
+  AuthenticationRequest:
+    description:
+      表示认证请求
+    required:
+      - username
+      - password
+    properties:
+      username:
+        description: 用户名
+        type: string
+      password:
+        description: 密码，需加密，不可明文传输
+        type: string
+
+  AuthenticationResponse:
+    description:
+      表示认证响应
+    properties:
+      token:
+        description: 访问token
+        type: string
+
+  User:
+    description:
+      表示用户资源
+    required:
+      - name
+    properties:
+      id:
+        description: 用户ID，由后端自动生成，创建用户时不需要
+        type: integer
+        format: int64
+      name:
+        description: 用户姓名
+        type: string
+      password:
+        description: 用户密码，仅在创建用户时需要提供，并需加密
+        type: string
+      phone:
+        description: 用户电话号码
+        type: string
+      email:
+        description: 用户邮件地址
+        type: string
+      role:
+        description: 用户角色，目前可能为ROOT, ADMIN, EMPLOYEE, INTERNAL_EXPERT, EXTERNAL_EXPERT五种
+        type: string
+      startupId:
+        description: 用户所属的创业公司ID，如为专家或根用户，则此项为空
+        type: integer
+        format: int64
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  Startup:
+    description:
+      表示创业公司资源
+    required:
+      - name
+    properties:
+      id:
+        description: 创业公司ID，由后端自动生成，创建创业公司时不需要
+        type: integer
+        format: int64
+      name:
+        description: 创业公司名称
+        type: string
+      corpName:
+        description: 创业公司注册名称
+        type: string
+      startYear:
+        description: 创业公司创始年份
+        type: integer
+      startMonth:
+        description: 创业公司创始月份
+        type: integer
+      productName:
+        description: 创业公司产品名称
+        type: string
+      productDesc:
+        description: 创业公司产品描述
+        type: string
+      location:
+        description: 创业公司地址
+        type: string
+      scope:
+        description: 创业公司经营范围
+        type: string
+      phase:
+        description: 创业公司融资阶段
+        type: string
+      intro:
+        description: 创业公司介绍
+        type: string
+      corpIdPhoto:
+        description: 创业公司照片地址
+        type: string
+      logo:
+        description: 创业公司Logo图片地址
+        type: string
+      adminId:
+        description: 创业公司管理员ID
+        type: integer
+        format: int64
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  Founder:
+    description:
+      表示创业人资源
+    required:
+      - name
+    properties:
+      id:
+        description: 创业人ID，由后端自动生成，创建创业人时不需要
+        type: integer
+        format: int64
+      name:
+        description: 创始人姓名
+        type: string
+      position:
+        description: 创始人职位
+        type: string
+      email:
+        description: 创始人邮件地址
+        type: string
+      intro:
+        description: 创始人介绍
+        type: string
+      startupId:
+        description: 创业公司ID
+        type: integer
+        format: int64
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  Topic:
+    description:
+      表示主题资源
+    required:
+      - userId
+      - title
+    properties:
+      id:
+        description: 主题ID，由后端自动生成，创建主题时不需要
+        type: integer
+        format: int64
+      userId:
+        description: 主题发布者
+        type: integer
+        format: int64
+      title:
+        description: 主题标题
+        type: string
+      content:
+        description: 主题内容
+        type: string
+      ctocoins:
+        description: 主题悬赏分
+        type: string
+      confirmed:
+        description: 主题是否已有回复被发布者采纳
+        type: boolean
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  Reply:
+    description:
+      表示回复资源
+    required:
+      - userId
+      - topicId
+    properties:
+      id:
+        description: 回复ID，由后端自动生成，创建时不需要
+        type: integer
+        format: int64
+      userId:
+        description: 回复发布者
+        type: integer
+        format: int64
+      title:
+        description: 回复标题
+        type: string
+      content:
+        description: 回复内容
+        type: string
+      topicId:
+        description: 回复主题的ID
+        type: integer
+        format: int64
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  Comment:
+    description:
+      表示评论资源
+    required:
+      - userId
+    properties:
+      id:
+        description: 评论ID，由后端自动生成，创建时不需要
+        type: integer
+        format: int64
+      userId:
+        description: 评论发布者
+        type: integer
+        format: int64
+      content:
+        description: 评论内容
+        type: string
+      topicId:
+        description: 评论主题的ID
+        type: integer
+        format: int64
+      replyId:
+        description: 评论主题的ID
+        type: integer
+        format: int64
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  Error:
+    properties:
+      code:
+        description: 错误代码
+        type: string
+      message:
+        description: 错误信息
+        type: string

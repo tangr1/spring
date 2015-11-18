@@ -16,7 +16,7 @@ gradle run
 
 Insert data
 ```
-curl -i -H "Content-type: application/json" localhost:8090/topics -d '{"title":"a", "body":"aaa", "userId":"101", "category":"frontend", "reward":10}'
+curl -i -H "Content-type: application/json" localhost:8090/topics -d '{"title":"a", "content":"aaa", "userId":"101", "category":"frontend", "ctocoins":10}'
 ```
 
 Query data

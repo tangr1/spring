@@ -6,8 +6,8 @@
 
 package com.ctof.server.controller;
 
-import com.ctof.server.model.Comment;
 import com.ctof.server.exception.NotFoundException;
+import com.ctof.server.model.Comment;
 import com.ctof.server.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,8 +56,8 @@ public class CommentController {
         if (comment == null) {
             throw new NotFoundException();
         }
-        if (updated.getBody() != null) {
-            comment.setBody(updated.getBody());
+        if (updated.getContent() != null) {
+            comment.setContent(updated.getContent());
         }
         commentRepository.save(comment);
         return comment;

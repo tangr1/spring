@@ -6,7 +6,9 @@
 
 package com.ctof.server.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "comments")
@@ -14,7 +16,7 @@ public class Comment extends BaseModel {
     private Long userId;
     private Long replyId;
     private Long topicId;
-    private String body;
+    private String content;
 
     @Column
     public Long getTopicId() {
@@ -44,11 +46,11 @@ public class Comment extends BaseModel {
     }
 
     @Column
-    public String getBody() {
-        return body;
+    public String getContent() {
+        return content;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

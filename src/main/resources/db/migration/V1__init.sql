@@ -1,11 +1,12 @@
 # noinspection SqlNoDataSourceInspectionForFile
 CREATE TABLE `topics` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `body` text DEFAULT NULL,
+  `content` text DEFAULT NULL,
   `category` varchar(64) DEFAULT NULL,
-  `reward` bigint(20) DEFAULT NULL,
-  `status` varchar(64) DEFAULT NULL,
+  `ctocoins` bigint(20) DEFAULT NULL,
+  `confirmed` char(1) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
+  `labels` varchar(255) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `modified_at` datetime DEFAULT NULL,
@@ -14,7 +15,7 @@ CREATE TABLE `topics` (
 
 CREATE TABLE `comments` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `body` varchar(255) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
   `reply_id` bigint(20) DEFAULT NULL,
   `topic_id` bigint(20) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
@@ -25,7 +26,7 @@ CREATE TABLE `comments` (
 
 CREATE TABLE `replies` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `body` text DEFAULT NULL,
+  `content` text DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `topic_id` bigint(20) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
@@ -60,7 +61,7 @@ CREATE TABLE `startups` (
   `scope` varchar(255) DEFAULT NULL,
   `start_month` int(11) DEFAULT NULL,
   `start_year` int(11) DEFAULT NULL,
-  `startup_intro` text DEFAULT NULL,
+  `intro` text DEFAULT NULL,
   `admin_id` bigint(20) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `modified_at` datetime DEFAULT NULL,

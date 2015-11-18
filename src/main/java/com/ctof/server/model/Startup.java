@@ -1,6 +1,8 @@
 package com.ctof.server.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "startups")
@@ -14,7 +16,7 @@ public class Startup extends BaseModel {
     private String location;
     private String scope;
     private String phase;
-    private String startupIntro;
+    private String intro;
     private String corpIdPhoto;
     private String logo;
     private Long adminId;
@@ -101,12 +103,12 @@ public class Startup extends BaseModel {
     }
 
     @Column
-    public String getStartupIntro() {
-        return startupIntro;
+    public String getIntro() {
+        return intro;
     }
 
-    public void setStartupIntro(String startupIntro) {
-        this.startupIntro = startupIntro;
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 
     @Column

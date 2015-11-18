@@ -7,5 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
     Page<User> findByStartupId(Long startupId, Pageable pageable);
+
     User findByName(String name);
 }
