@@ -95,6 +95,17 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /forgotpassword/:
+    post:
+      summary: 忘记密码
+      description: |
+        忘记密码
+      tags:
+        - security
+      responses:
+        200:
+          description: 生成短链
+
   /sendmail/:
     post:
       summary: 发送邮件
@@ -111,6 +122,79 @@ paths:
       responses:
         200:
           description: 成功发送
+
+  /emails/{name}/:
+    head:
+      summary: 检查邮箱地址是否被用
+      description: |
+        检查邮箱地址是否被用
+      tags:
+        - misc
+      parameters:
+        - name: name
+          in: path
+          description: 邮箱地址
+          required: true
+          type: string
+      responses:
+        200:
+          description: 邮箱未被占用
+        404:
+          description: 邮箱已被占用
+
+  /usernames/{name}/:
+    head:
+      summary: 检查用户名是否被用
+      description: |
+        检查用户名是否被用
+      tags:
+        - misc
+      parameters:
+        - name: name
+          in: path
+          description: 用户名
+          required: true
+          type: string
+      responses:
+        200:
+          description: 用户名未被占用
+        404:
+          description: 用户名已被占用
+
+  /invitecodes/:
+    post:
+      summary: 生成邀请码
+      description: |
+        根据请求生成邀请码
+      tags:
+        - misc
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/InviteCode'
+      responses:
+        201:
+          description: 成功生成邀请码
+          schema:
+            $ref: '#/definitions/InviteCode'
+        400: &400
+          description: 无效请求
+          schema:
+            $ref: '#/definitions/Error'
+        401: &401
+          description: 未认证
+          schema:
+            $ref: '#/definitions/Error'
+        403: &403
+          description: 无访问权限
+          schema:
+            $ref: '#/definitions/Error'
+        500: &500
+          description: 服务端内部错误
+          schema:
+            $ref: '#/definitions/Error'
 
   /users/:
     get:
@@ -144,6 +228,11 @@ paths:
         - name: role
           in: path
           description: 用户角色类型
+          required: false
+          type: string
+        - name: status
+          in: path
+          description: 用户状态
           required: false
           type: string
       tags:
@@ -203,8 +292,6 @@ paths:
           required: true
           type: integer
           format: int64
-      tags:
-        - user
       responses:
         200:
           description: 成功查询用户
@@ -329,8 +416,6 @@ paths:
           required: true
           type: integer
           format: int64
-      tags:
-        - startup
       responses:
         200:
           description: 成功查询创业公司
@@ -453,8 +538,6 @@ paths:
           required: true
           type: integer
           format: int64
-      tags:
-        - founder
       responses:
         200:
           description: 成功查询创始人
@@ -582,8 +665,6 @@ paths:
           required: true
           type: integer
           format: int64
-      tags:
-        - topic
       responses:
         200:
           description: 成功查询主题
@@ -708,8 +789,6 @@ paths:
           required: true
           type: integer
           format: int64
-      tags:
-        - reply
       responses:
         200:
           description: 成功查询回复
@@ -839,8 +918,6 @@ paths:
           required: true
           type: integer
           format: int64
-      tags:
-        - comment
       responses:
         200:
           description: 成功查询评论
@@ -953,6 +1030,10 @@ definitions:
         description: 用户ID，由后端自动生成，创建用户时不需要
         type: integer
         format: int64
+      inviteCodeId:
+        description: 使用的邀请码ID
+        type: integer
+        format: int64
       name:
         description: 用户姓名
         type: string
@@ -968,10 +1049,19 @@ definitions:
       role:
         description: 用户角色，目前可能为ROOT, ADMIN, EMPLOYEE, INTERNAL_EXPERT, EXTERNAL_EXPERT五种
         type: string
+        enum:
+          - ROOT
+          - ADMIN
+          - EMPLOYEE
+          - INTERNAL_EXPERT
+          - EXTERNAL_EXPERT
       startupId:
         description: 用户所属的创业公司ID，如为专家或根用户，则此项为空
         type: integer
         format: int64
+      ctocoins:
+        description: 拥有的悬赏分
+        type: integer
       createdAt:
         description: 创建时间
         type: string
@@ -980,6 +1070,15 @@ definitions:
         description: 最近一次修改时间
         type: string
         format: date-time
+      status:
+        description: 用户状态
+        type: string
+        enum:
+          - NEW
+          - REVIEWING
+          - REJECTED
+          - APPROVED
+          - DELETED
 
   Startup:
     description:
@@ -1102,10 +1201,15 @@ definitions:
         type: string
       ctocoins:
         description: 主题悬赏分
-        type: string
+        type: integer
       category:
         description: 主题类别
         type: string
+      labels:
+        description: 主题标签
+        type: array
+        items:
+          type: string
       confirmed:
         description: 主题是否已有回复被发布者采纳
         type: boolean
@@ -1185,6 +1289,48 @@ definitions:
         description: 最近一次修改时间
         type: string
         format: date-time
+
+  EmailRequest:
+    properties:
+      subject:
+        description: 标题
+        type: string
+      body:
+        description: 正文
+        type: string
+      to:
+        description: 收件人
+        type: array
+        items:
+          type: string
+      cc:
+        description: 抄送人
+        type: array
+        items:
+          type: string
+
+  InvitedCode:
+    properties:
+      code:
+        description: 邀请码
+        type: string
+      type:
+        description: 邀请码类型, 和用户role匹配
+        type: string
+        enum:
+          - EMPLOYEE
+          - INTERNAL_EXPERT
+          - EXTERNAL_EXPERT
+      inviterId:
+        description: 邀请者ID
+        type: integer
+        format: int64
+      quota:
+        description: 配额
+        type: integer
+      usage:
+        description: 已使用额度
+        type: integer
 
   Error:
     properties:

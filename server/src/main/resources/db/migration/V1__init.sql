@@ -8,6 +8,7 @@ CREATE TABLE `topics` (
   `title`       VARCHAR(255) NOT NULL,
   `labels`      VARCHAR(255) NOT NULL,
   `user_id`     BIGINT(20)   NOT NULL,
+  `startup_id`     BIGINT(20)   NOT NULL,
   `created_at`  DATETIME              DEFAULT NULL,
   `modified_at` DATETIME              DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -41,6 +42,20 @@ CREATE TABLE `replies` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+CREATE TABLE `invitecodes` (
+  `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT,
+  `code`        VARCHAR(64)           DEFAULT NULL,
+  `type`        VARCHAR(64)  NOT NULL,
+  `inviter_id`  BIGINT(20)            DEFAULT NULL,
+  `quota`       INT(11)               DEFAULT NULL,
+  `usage`       INT(11)               DEFAULT 0,
+  `created_at`  DATETIME              DEFAULT NULL,
+  `modified_at` DATETIME              DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 CREATE TABLE `users` (
   `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT,
   `email`       VARCHAR(64)           DEFAULT NULL,
@@ -48,6 +63,9 @@ CREATE TABLE `users` (
   `password`    VARCHAR(255) NOT NULL,
   `phone`       VARCHAR(64)           DEFAULT NULL,
   `role`        VARCHAR(64)           DEFAULT NULL,
+  `ctocoins`    BIGINT(20)            DEFAULT NULL,
+  `invitecode_id`  BIGINT(20)         DEFAULT NULL,
+  `status`      VARCHAR(64)           DEFAULT,
   `startup_id`  BIGINT(20)            DEFAULT NULL,
   `created_at`  DATETIME              DEFAULT NULL,
   `modified_at` DATETIME              DEFAULT NULL,
@@ -92,5 +110,5 @@ CREATE TABLE `founders` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO users (name, password, role)
-VALUES ('root', '$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC', 'ROOT');
+INSERT INTO users (name, email, password, role, created_at, modified_at)
+VALUES ('root', 'root@ctofunds.com', '$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC', 'ROOT', now(), now());

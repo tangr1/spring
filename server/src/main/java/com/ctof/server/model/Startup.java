@@ -1,8 +1,6 @@
 package com.ctof.server.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "startups")
@@ -20,6 +18,17 @@ public class Startup extends BaseModel {
     private String corpIdPhoto;
     private String logo;
     private Long adminId;
+    private Status status;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @Column
     public Long getAdminId() {
@@ -136,5 +145,13 @@ public class Startup extends BaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public enum Status {
+        NEW,
+        REVIEWING,
+        REJECTED,
+        APPROVED,
+        DELETED,
     }
 }

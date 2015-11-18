@@ -35,7 +35,7 @@ public class UserController {
     public Page<User> list(
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-            @RequestParam(value = "startupId", required = true) Long startupId) {
+            @RequestParam(value = "startupId", required = false) Long startupId) {
         if (startupId != null) {
             return userRepository.findByStartupId(startupId, new PageRequest(page - 1, pageSize));
         } else {

@@ -7,7 +7,7 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.99.100:3306/ctof
-    email: root
+    username: root
     password: password
   jpa:
     show-sql: true

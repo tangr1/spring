@@ -14,6 +14,17 @@ public class User extends BaseModel {
     private String phone;
     private Role role;
     private Long startupId;
+    private Status status;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -76,5 +87,13 @@ public class User extends BaseModel {
         EMPLOYEE,
         INTERNAL_EXPERT,
         EXTERNAL_EXPERT,
+    }
+
+    public enum Status {
+        NEW,
+        REVIEWING,
+        REJECTED,
+        APPROVED,
+        DELETED,
     }
 }

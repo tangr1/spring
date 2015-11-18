@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/login")
 public class AuthenticationController {
 
+    private static int DEFAULT_EXPIRE_TIME = 15;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -50,7 +52,11 @@ public class AuthenticationController {
         // Return the token
         AuthenticationResponse response = new AuthenticationResponse();
         response.setToken(token);
-        response.setExpiresIn(DateTime.now().plusMinutes(authenticationRequest.getExpiredTime()));
+        int expireTime = DEFAULT_EXPIRE_TIME;
+        if (authenticationRequest.getExpiredTime() != null) {
+            expireTime = authenticationRequest.getExpiredTime();
+        }
+        response.setExpiresIn(DateTime.now().plusMinutes(expireTime));
         return ResponseEntity.ok(response);
     }
 
