@@ -965,15 +965,6 @@ paths:
       summary: 更新评论
       description: |
         根据请求中指定要更新的属性对评论进行更新
-
-        Example:
-        1. 更新评论姓名和邮件
-            ```json
-            {
-              "name":"newName",
-              "email": "new@email.com"
-            }
-            ```
       tags:
         - comment
       parameters:

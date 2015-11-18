@@ -11,6 +11,7 @@ Install the following tools before you continue:
 
 Start web server
 ```
+cd server
 gradle run
 ```
 

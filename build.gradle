@@ -7,34 +7,18 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
-
-jar {
-    baseName = 'ctof-server'
-    version =  '0.0.1'
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
+    }
 }
 
-repositories {
-    mavenCentral()
-    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
-}
-
-dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile('com.h2database:h2')
-    compile('org.flywaydb:flyway-core')
-    compile('mysql:mysql-connector-java:5.1.37')
-    compile('com.zaxxer:HikariCP:2.4.2')
-    compile('joda-time:joda-time:2.4')
-    compile("org.apache.commons:commons-lang3:3.0")
-    compile("io.jsonwebtoken:jjwt:0.3")
-    testCompile('junit:junit')
+subprojects {
+    apply plugin: 'java'
+    apply plugin: "application"
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
 }
 
 task wrapper(type: Wrapper) {
