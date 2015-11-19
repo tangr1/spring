@@ -1,9 +1,3 @@
-/*
- * ******************************************************
- * Copyright VMware, Inc. 2014.   All Rights Reserved.
- * ******************************************************
- */
-
 package com.ctof.server.model.converter;
 
 import javax.persistence.AttributeConverter;

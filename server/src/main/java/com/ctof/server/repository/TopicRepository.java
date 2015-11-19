@@ -1,12 +1,6 @@
-/*
- *  *****************************************************
- *  Copyright VMware, Inc. 2014.   All Rights Reserved.
- *  ******************************************************
- */
-
 package com.ctof.server.repository;
 
-import com.ctof.server.model.Topic;
+import com.ctof.server.model.TopicModel;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -16,11 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @CacheConfig(cacheNames = "topics")
-public interface TopicRepository extends PagingAndSortingRepository<Topic, Long> {
-    Page<Topic> findByCategory(String category, Pageable pageable);
+public interface TopicRepository extends PagingAndSortingRepository<TopicModel, Long> {
+    Page<TopicModel> findByCategory(String category, Pageable pageable);
 
     @Cacheable
-    Page<Topic> findByUserId(Long userId, Pageable pageable);
+    Page<TopicModel> findByUserId(Long userId, Pageable pageable);
 
-    Page<Topic> findByUserIdAndCategory(Long userId, String category, Pageable pageable);
+    Page<TopicModel> findByUserIdAndCategory(Long userId, String category, Pageable pageable);
 }

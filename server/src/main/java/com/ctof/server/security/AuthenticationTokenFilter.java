@@ -1,6 +1,6 @@
 package com.ctof.server.security;
 
-import com.ctof.server.token.TokenService;
+import com.ctof.server.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

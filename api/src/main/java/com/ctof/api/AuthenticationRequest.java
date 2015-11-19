@@ -12,7 +12,8 @@ import javax.validation.constraints.*;
     public class AuthenticationRequest  {
     
         private String password = null;
-        private String username = null;
+        private String email = null;
+        private Integer expiredTime = null;
 
     
         /**
@@ -29,16 +30,28 @@ import javax.validation.constraints.*;
         }
     
         /**
-            * 用户名
+            * 用户注册的email地址
         **/
-        @JsonProperty("username")
+        @JsonProperty("email")
         @Valid
         @NotNull
-        public String getUsername() {
-            return username;
+        public String getEmail() {
+            return email;
         }
-        public void setUsername(String username) {
-            this.username = username;
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    
+        /**
+            * token失效时间, 单位为分钟
+        **/
+        @JsonProperty("expiredTime")
+        @Valid
+        public Integer getExpiredTime() {
+            return expiredTime;
+        }
+        public void setExpiredTime(Integer expiredTime) {
+            this.expiredTime = expiredTime;
         }
     
 
@@ -48,7 +61,8 @@ import javax.validation.constraints.*;
             sb.append("class AuthenticationRequest {\n");
             
             sb.append("  password: ").append(password).append("\n");
-            sb.append("  username: ").append(username).append("\n");
+            sb.append("  email: ").append(email).append("\n");
+            sb.append("  expiredTime: ").append(expiredTime).append("\n");
             sb.append("}\n");
             return sb.toString();
         }

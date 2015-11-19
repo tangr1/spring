@@ -1,8 +1,8 @@
 package com.ctof.server.controller;
 
-import com.ctof.server.api.AuthenticationRequest;
-import com.ctof.server.api.AuthenticationResponse;
-import com.ctof.server.token.TokenService;
+import com.ctof.api.AuthenticationRequest;
+import com.ctof.api.AuthenticationResponse;
+import com.ctof.server.service.TokenService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +56,7 @@ public class AuthenticationController {
         if (authenticationRequest.getExpiredTime() != null) {
             expireTime = authenticationRequest.getExpiredTime();
         }
-        response.setExpiresIn(DateTime.now().plusMinutes(expireTime));
+        response.setExpiresIn(DateTime.now().plusMinutes(expireTime).toString());
         return ResponseEntity.ok(response);
     }
 

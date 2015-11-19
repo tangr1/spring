@@ -1,9 +1,3 @@
-/*
- * ******************************************************
- * Copyright VMware, Inc. 2014.   All Rights Reserved.
- * ******************************************************
- */
-
 package com.ctof.server.model;
 
 import com.ctof.server.model.converter.DateToDateTimeConverter;

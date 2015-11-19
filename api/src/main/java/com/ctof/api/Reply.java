@@ -38,7 +38,6 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("topicId")
         @Valid
-        @NotNull
         public Long getTopicId() {
             return topicId;
         }
@@ -87,7 +86,6 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("userId")
         @Valid
-        @NotNull
         public Long getUserId() {
             return userId;
         }

@@ -4,6 +4,7 @@ import com.ctof.server.config.time.JodaTimeModule;
 import com.ctof.server.interceptor.AuthInterceptor;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -43,5 +44,12 @@ public class SpringConfiguration extends WebMvcConfigurerAdapter {
         converter.setObjectMapper(objectMapper());
         converters.add(converter);
         super.configureMessageConverters(converters);
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setPropertyCondition((context) -> context.getSource() != null);
+        return modelMapper;
     }
 }

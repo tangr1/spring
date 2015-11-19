@@ -86,7 +86,6 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("userId")
         @Valid
-        @NotNull
         public Long getUserId() {
             return userId;
         }

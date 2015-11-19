@@ -1,9 +1,3 @@
-/*
- *  *****************************************************
- *  Copyright VMware, Inc. 2014.   All Rights Reserved.
- *  ******************************************************
- */
-
 package com.ctof.server.controller;
 
 import com.ctof.server.repository.UserRepository;

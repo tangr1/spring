@@ -6,7 +6,7 @@ info:
   version: "1.0"
   contact:
     name: 唐睿
-    email: "tangrui@ctofunds.com"
+    email: "rui.tang@ctofunds.com"
 host: www.ctofunds.com
 schemes:
   - https
@@ -95,16 +95,22 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /forgotpassword/:
+  /forgotpassword/{email}:
     post:
       summary: 忘记密码
       description: |
         忘记密码
       tags:
         - security
+      parameters:
+        - name: email
+          in: path
+          description: 邮箱地址
+          required: true
+          type: string
       responses:
         200:
-          description: 生成短链
+          description: 生成含token的软件并发送给用户邮件
 
   /sendmail/:
     post:
@@ -118,7 +124,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/EmailRequest'
+            $ref: '#/definitions/SendEmailRequest'
       responses:
         200:
           description: 成功发送
@@ -138,9 +144,9 @@ paths:
           type: string
       responses:
         200:
-          description: 邮箱未被占用
-        404:
           description: 邮箱已被占用
+        404:
+          description: 邮箱未被占用
 
   /usernames/{name}/:
     head:
@@ -157,7 +163,7 @@ paths:
           type: string
       responses:
         200:
-          description: 用户名未被占用
+          description: 用户名已被占用
         404:
           description: 用户名已被占用
 
@@ -173,7 +179,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/InviteCode'
+            $ref: '#/definitions/CreateInviteCodeRequest'
       responses:
         201:
           description: 成功生成邀请码
@@ -195,6 +201,72 @@ paths:
           description: 服务端内部错误
           schema:
             $ref: '#/definitions/Error'
+
+  /invitecodes/{id}/:
+    get:
+      summary: 查询邀请码
+      description: |
+        得到指定邀请码的具体信息
+      tags:
+        - misc
+      parameters:
+        - &InviteCodeIdPara
+          name: id
+          in: path
+          description: 邀请码ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: 成功查询邀请码
+          schema:
+            $ref: '#/definitions/InviteCode'
+        404: &404
+          description: 没找到指定对象
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 删除邀请码
+      description: |
+        删除指定邀请码，后端采用懒删除，只是将状态设成已删除，数据将根据一定物理策略删除
+      tags:
+        - misc
+      parameters:
+        - *InviteCodeIdPara
+      responses:
+        200:
+          description: 成功删除邀请码
+          schema:
+            $ref: '#/definitions/InviteCode'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
+    put:
+      summary: 更新邀请码
+      description: |
+        根据请求中指定要更新的属性对邀请码进行更新
+      tags:
+        - misc
+      parameters:
+        - *InviteCodeIdPara
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateInviteCodeRequest'
+      responses:
+        200:
+          description: 成功更新邀请码
+          schema:
+            $ref: '#/definitions/InviteCode'
+        400: *400
+        401: *401
+        403: *403
+        404: *404
+        500: *500
 
   /users/:
     get:
@@ -254,7 +326,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/CreateUserRequest'
       responses:
         201:
           description: 成功创建用户
@@ -340,7 +412,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/UpdateUserRequest'
       responses:
         200:
           description: 成功更新用户
@@ -390,7 +462,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Startup'
+            $ref: '#/definitions/CreateStartupRequest'
       responses:
         201:
           description: 成功创建创业公司
@@ -456,7 +528,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Startup'
+            $ref: '#/definitions/UpdateStartupRequest'
       responses:
         200:
           description: 成功更新创业公司
@@ -512,7 +584,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Founder'
+            $ref: '#/definitions/CreateFounderRequest'
       responses:
         201:
           description: 成功创建创始人
@@ -578,7 +650,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Founder'
+            $ref: '#/definitions/UpdateFounderRequest'
       responses:
         200:
           description: 成功更新创始人
@@ -639,7 +711,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Topic'
+            $ref: '#/definitions/CreateTopicRequest'
       responses:
         201:
           description: 成功创建主题
@@ -701,7 +773,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Topic'
+            $ref: '#/definitions/UpdateTopicRequest'
       responses:
         200:
           description: 成功更新主题
@@ -763,7 +835,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Reply'
+            $ref: '#/definitions/CreateTopicRequest'
       responses:
         201:
           description: 成功创建回复
@@ -829,7 +901,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Reply'
+            $ref: '#/definitions/UpdateReplyRequest'
       responses:
         200:
           description: 成功更新回复
@@ -892,7 +964,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Comment'
+            $ref: '#/definitions/CreateCommentRequest'
       responses:
         201:
           description: 成功创建评论
@@ -954,7 +1026,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Comment'
+            $ref: '#/definitions/UpdateCommentRequest'
       responses:
         200:
           description: 成功更新评论
@@ -1023,17 +1095,14 @@ definitions:
   User:
     description:
       表示用户资源
-    required:
-      - name
     properties:
       id:
         description: 用户ID，由后端自动生成，创建用户时不需要
         type: integer
         format: int64
-      inviteCodeId:
-        description: 使用的邀请码ID
-        type: integer
-        format: int64
+      inviteCode:
+        description: 使用的邀请码
+        type: string
       name:
         description: 用户姓名
         type: string
@@ -1080,11 +1149,92 @@ definitions:
           - APPROVED
           - DELETED
 
+  CreateUserRequest:
+    description:
+      表示创建用户请求
+    required:
+      - name
+      - password
+      - email
+      - role
+    properties:
+      inviteCode:
+        description: 使用的邀请码
+        type: string
+      name:
+        description: 用户姓名
+        type: string
+      password:
+        description: 用户密码，仅在创建用户时需要提供，并需加密
+        type: string
+      phone:
+        description: 用户电话号码
+        type: string
+      email:
+        description: 用户邮件地址
+        type: string
+      role:
+        description: 用户角色，目前可能为ROOT, ADMIN, EMPLOYEE, INTERNAL_EXPERT, EXTERNAL_EXPERT五种
+        type: string
+        enum:
+          - ROOT
+          - ADMIN
+          - EMPLOYEE
+          - INTERNAL_EXPERT
+          - EXTERNAL_EXPERT
+      startupId:
+        description: 用户所属的创业公司ID，如为专家或根用户，则此项为空
+        type: integer
+        format: int64
+      ctocoins:
+        description: 拥有的悬赏分
+        type: integer
+
+  UpdateUserRequest:
+    description:
+      表示更新用户请求
+    properties:
+      name:
+        description: 用户姓名
+        type: string
+      password:
+        description: 用户密码，仅在创建用户时需要提供，并需加密
+        type: string
+      phone:
+        description: 用户电话号码
+        type: string
+      email:
+        description: 用户邮件地址
+        type: string
+      role:
+        description: 用户角色，目前可能为ROOT, ADMIN, EMPLOYEE, INTERNAL_EXPERT, EXTERNAL_EXPERT五种
+        type: string
+        enum:
+          - ROOT
+          - ADMIN
+          - EMPLOYEE
+          - INTERNAL_EXPERT
+          - EXTERNAL_EXPERT
+      startupId:
+        description: 用户所属的创业公司ID，如为专家或根用户，则此项为空
+        type: integer
+        format: int64
+      ctocoins:
+        description: 拥有的悬赏分
+        type: integer
+      status:
+        description: 用户状态
+        type: string
+        enum:
+          - NEW
+          - REVIEWING
+          - REJECTED
+          - APPROVED
+          - DELETED
+
   Startup:
     description:
       表示创业公司资源
-    required:
-      - name
     properties:
       id:
         description: 创业公司ID，由后端自动生成，创建创业公司时不需要
@@ -1139,11 +1289,101 @@ definitions:
         type: string
         format: date-time
 
+  CreateStartupRequest:
+    description:
+      表示创建创业公司请求
+    required:
+      - name
+    properties:
+      name:
+        description: 创业公司名称
+        type: string
+      corpName:
+        description: 创业公司注册名称
+        type: string
+      startYear:
+        description: 创业公司创始年份
+        type: integer
+      startMonth:
+        description: 创业公司创始月份
+        type: integer
+      productName:
+        description: 创业公司产品名称
+        type: string
+      productDesc:
+        description: 创业公司产品描述
+        type: string
+      location:
+        description: 创业公司地址
+        type: string
+      scope:
+        description: 创业公司经营范围
+        type: string
+      phase:
+        description: 创业公司融资阶段
+        type: string
+      intro:
+        description: 创业公司介绍
+        type: string
+      corpIdPhoto:
+        description: 创业公司照片地址
+        type: string
+      logo:
+        description: 创业公司Logo图片地址
+        type: string
+      adminId:
+        description: 创业公司管理员ID
+        type: integer
+        format: int64
+
+  UpdateStartupRequest:
+    description:
+      表示更新创业公司请求
+    properties:
+      name:
+        description: 创业公司名称
+        type: string
+      corpName:
+        description: 创业公司注册名称
+        type: string
+      startYear:
+        description: 创业公司创始年份
+        type: integer
+      startMonth:
+        description: 创业公司创始月份
+        type: integer
+      productName:
+        description: 创业公司产品名称
+        type: string
+      productDesc:
+        description: 创业公司产品描述
+        type: string
+      location:
+        description: 创业公司地址
+        type: string
+      scope:
+        description: 创业公司经营范围
+        type: string
+      phase:
+        description: 创业公司融资阶段
+        type: string
+      intro:
+        description: 创业公司介绍
+        type: string
+      corpIdPhoto:
+        description: 创业公司照片地址
+        type: string
+      logo:
+        description: 创业公司Logo图片地址
+        type: string
+      adminId:
+        description: 创业公司管理员ID
+        type: integer
+        format: int64
+
   Founder:
     description:
       表示创业人资源
-    required:
-      - name
     properties:
       id:
         description: 创业人ID，由后端自动生成，创建创业人时不需要
@@ -1174,12 +1414,54 @@ definitions:
         type: string
         format: date-time
 
+  CreateFounderRequest:
+    description:
+      表示创建创业人请求
+    required:
+      - name
+      - startupId
+    properties:
+      name:
+        description: 创始人姓名
+        type: string
+      position:
+        description: 创始人职位
+        type: string
+      email:
+        description: 创始人邮件地址
+        type: string
+      intro:
+        description: 创始人介绍
+        type: string
+      startupId:
+        description: 创业公司ID
+        type: integer
+        format: int64
+
+  UpdateFounderRequest:
+    description:
+      表示更新创业人请求
+    properties:
+      name:
+        description: 创始人姓名
+        type: string
+      position:
+        description: 创始人职位
+        type: string
+      email:
+        description: 创始人邮件地址
+        type: string
+      intro:
+        description: 创始人介绍
+        type: string
+      startupId:
+        description: 创业公司ID
+        type: integer
+        format: int64
+
   Topic:
     description:
       表示主题资源
-    required:
-      - userId
-      - title
     properties:
       id:
         description: 主题ID，由后端自动生成，创建主题时不需要
@@ -1222,12 +1504,75 @@ definitions:
         type: string
         format: date-time
 
+  CreateTopicRequest:
+    description:
+      表示创建主题请求
+    required:
+      - userId
+      - title
+    properties:
+      userId:
+        description: 主题发布者
+        type: integer
+        format: int64
+      startupId:
+        description: 主题发布者所属创业公司
+        type: integer
+        format: int64
+      title:
+        description: 主题标题
+        type: string
+      content:
+        description: 主题内容
+        type: string
+      ctocoins:
+        description: 主题悬赏分
+        type: integer
+      category:
+        description: 主题类别
+        type: string
+      labels:
+        description: 主题标签
+        type: array
+        items:
+          type: string
+
+  UpdateTopicRequest:
+    description:
+      表示更新主题请求
+    properties:
+      userId:
+        description: 主题发布者
+        type: integer
+        format: int64
+      startupId:
+        description: 主题发布者所属创业公司
+        type: integer
+        format: int64
+      title:
+        description: 主题标题
+        type: string
+      content:
+        description: 主题内容
+        type: string
+      ctocoins:
+        description: 主题悬赏分
+        type: integer
+      category:
+        description: 主题类别
+        type: string
+      labels:
+        description: 主题标签
+        type: array
+        items:
+          type: string
+      confirmed:
+        description: 主题是否已有回复被发布者采纳
+        type: boolean
+
   Reply:
     description:
       表示回复资源
-    required:
-      - userId
-      - topicId
     properties:
       id:
         description: 回复ID，由后端自动生成，创建时不需要
@@ -1256,11 +1601,49 @@ definitions:
         type: string
         format: date-time
 
-  Comment:
+  CreateReplyRequest:
     description:
-      表示评论资源
+      表示创建回复请求
     required:
       - userId
+      - topicId
+    properties:
+      userId:
+        description: 回复发布者
+        type: integer
+        format: int64
+      title:
+        description: 回复标题
+        type: string
+      content:
+        description: 回复内容
+        type: string
+      topicId:
+        description: 回复主题的ID
+        type: integer
+        format: int64
+
+  UpdateReplyRequest:
+    description:
+      表示更新回复请求
+    properties:
+      userId:
+        description: 回复发布者
+        type: integer
+        format: int64
+      title:
+        description: 回复标题
+        type: string
+      content:
+        description: 回复内容
+        type: string
+      topicId:
+        description: 回复主题的ID
+        type: integer
+        format: int64
+
+  Comment:
+    description: 表示评论资源
     properties:
       id:
         description: 评论ID，由后端自动生成，创建时不需要
@@ -1290,7 +1673,48 @@ definitions:
         type: string
         format: date-time
 
-  EmailRequest:
+  CreateCommentRequest:
+    description: 表示创建评论请求
+    required:
+      - userId
+    properties:
+      userId:
+        description: 评论发布者
+        type: integer
+        format: int64
+      content:
+        description: 评论内容
+        type: string
+      topicId:
+        description: 评论主题的ID
+        type: integer
+        format: int64
+      replyId:
+        description: 评论主题的ID
+        type: integer
+        format: int64
+
+  UpdateCommentRequest:
+    description: 表示更新评论请求
+    properties:
+      userId:
+        description: 评论发布者
+        type: integer
+        format: int64
+      content:
+        description: 评论内容
+        type: string
+      topicId:
+        description: 评论主题的ID
+        type: integer
+        format: int64
+      replyId:
+        description: 评论主题的ID
+        type: integer
+        format: int64
+
+  SendEmailRequest:
+    description: 表示发送邮件请求
     properties:
       subject:
         description: 标题
@@ -1309,7 +1733,52 @@ definitions:
         items:
           type: string
 
-  InvitedCode:
+  InviteCode:
+    description: 表示邀请码资源
+    properties:
+      id:
+        description: 邀请码ID，由后端自动生成，创建时不需要
+        type: integer
+        format: int64
+      code:
+        description: 邀请码
+        type: string
+      type:
+        description: 邀请码类型, 和用户role匹配
+        type: string
+        enum:
+          - EMPLOYEE
+          - INTERNAL_EXPERT
+          - EXTERNAL_EXPERT
+      inviterId:
+        description: 邀请者ID
+        type: integer
+        format: int64
+      startupId:
+        description: 创业公司ID
+        type: integer
+        format: int64
+      quota:
+        description: 配额
+        type: integer
+      used:
+        description: 已使用额度
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+        format: date-time
+      modifiedAt:
+        description: 最近一次修改时间
+        type: string
+        format: date-time
+
+  CreateInviteCodeRequest:
+    description: 表示创建邀请码请求
+    required:
+      - code
+      - type
+      - quota
     properties:
       code:
         description: 邀请码
@@ -1325,10 +1794,36 @@ definitions:
         description: 邀请者ID
         type: integer
         format: int64
+      startupId:
+        description: 创业公司ID
+        type: integer
+        format: int64
       quota:
         description: 配额
         type: integer
-      usage:
+
+  UpdateInviteCodeRequest:
+    description: 表示更新邀请码请求
+    properties:
+      type:
+        description: 邀请码类型, 和用户role匹配
+        type: string
+        enum:
+          - EMPLOYEE
+          - INTERNAL_EXPERT
+          - EXTERNAL_EXPERT
+      inviterId:
+        description: 邀请者ID
+        type: integer
+        format: int64
+      startupId:
+        description: 创业公司ID
+        type: integer
+        format: int64
+      quota:
+        description: 配额
+        type: integer
+      used:
         description: 已使用额度
         type: integer
 

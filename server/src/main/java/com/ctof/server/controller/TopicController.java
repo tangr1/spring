@@ -1,14 +1,9 @@
-/*
- *  *****************************************************
- *  Copyright VMware, Inc. 2014.   All Rights Reserved.
- *  ******************************************************
- */
-
 package com.ctof.server.controller;
 
-import com.ctof.server.exception.NotFoundException;
-import com.ctof.server.model.Topic;
-import com.ctof.server.repository.TopicRepository;
+import com.ctof.api.CreateTopicRequest;
+import com.ctof.api.Topic;
+import com.ctof.api.UpdateTopicRequest;
+import com.ctof.server.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,74 +13,42 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TopicController {
     @Autowired
-    private TopicRepository topicRepository;
+    private TopicService topicService;
 
     @RequestMapping(value = "/topics", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     @ResponseBody
     @Transactional
-    public Topic create(@RequestBody Topic topic) {
-        topic.setConfirmed(false);
-        return topicRepository.save(topic);
+    public Topic create(final @RequestBody CreateTopicRequest request) {
+        return topicService.create(request);
     }
 
     @RequestMapping(value = "/topics", method = RequestMethod.GET)
     @ResponseBody
     @Transactional(readOnly = true)
     public Page<Topic> list(
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize,
-            @RequestParam(value = "userid", required = false) Long userId,
-            @RequestParam(value = "category", required = false) String category) {
-        if (userId != null && category != null) {
-            return topicRepository.findByUserIdAndCategory(userId, category, new PageRequest(page - 1, pageSize));
-        } else if (userId != null) {
-            return topicRepository.findByUserId(userId, new PageRequest(page - 1, pageSize));
-        } else if (category != null) {
-            return topicRepository.findByCategory(category, new PageRequest(page - 1, pageSize));
-        } else {
-            return topicRepository.findAll(new PageRequest(page - 1, pageSize));
-        }
+            final @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            final @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize) {
+        return topicService.list(new PageRequest(page - 1, pageSize));
     }
 
     @RequestMapping(value = "/topics/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Transactional(readOnly = true)
     public Topic read(final @PathVariable Long id) {
-        Topic topic = topicRepository.findOne(id);
-        if (topic == null) {
-            throw new NotFoundException();
-        }
-        return topic;
+        return topicService.get(id);
     }
 
     @RequestMapping(value = "/topics/{id}", method = RequestMethod.PUT, headers = {"Content-type=application/json"})
     @ResponseBody
     @Transactional
-    public Topic update(final @PathVariable Long id, final @RequestBody Topic updated) {
-        Topic topic = topicRepository.findOne(id);
-        if (topic == null) {
-            throw new NotFoundException();
-        }
-        if (updated.getTitle() != null) {
-            topic.setTitle(updated.getTitle());
-        }
-        if (updated.getContent() != null) {
-            topic.setContent(updated.getContent());
-        }
-        if (updated.getConfirmed() != null) {
-            topic.setConfirmed(updated.getConfirmed());
-        }
-        if (updated.getCtocoins() != null) {
-            topic.setCtocoins(updated.getCtocoins());
-        }
-        topicRepository.save(topic);
-        return topic;
+    public Topic update(final @PathVariable Long id, final @RequestBody UpdateTopicRequest request) {
+        return topicService.update(id, request);
     }
 
     @RequestMapping(value = "/topics/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @Transactional
     public void delete(final @PathVariable Long id) {
-        topicRepository.delete(id);
+        topicService.delete(id);
     }
 }

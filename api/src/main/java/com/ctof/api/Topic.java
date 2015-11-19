@@ -1,5 +1,6 @@
 package com.ctof.api;
 
+import java.util.*;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,11 +16,14 @@ import javax.validation.constraints.*;
         private Date createdAt = null;
         private Date modifiedAt = null;
         private Long id = null;
+        private Long startupId = null;
         private String title = null;
-        private String ctocoins = null;
+        private Integer ctocoins = null;
+        private String category = null;
         private Long userId = null;
         private Boolean confirmed = null;
         private String content = null;
+        private List<String> labels = null;
 
     
         /**
@@ -59,11 +63,22 @@ import javax.validation.constraints.*;
         }
     
         /**
+            * 主题发布者所属创业公司
+        **/
+        @JsonProperty("startupId")
+        @Valid
+        public Long getStartupId() {
+            return startupId;
+        }
+        public void setStartupId(Long startupId) {
+            this.startupId = startupId;
+        }
+    
+        /**
             * 主题标题
         **/
         @JsonProperty("title")
         @Valid
-        @NotNull
         public String getTitle() {
             return title;
         }
@@ -76,11 +91,23 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("ctocoins")
         @Valid
-        public String getCtocoins() {
+        public Integer getCtocoins() {
             return ctocoins;
         }
-        public void setCtocoins(String ctocoins) {
+        public void setCtocoins(Integer ctocoins) {
             this.ctocoins = ctocoins;
+        }
+    
+        /**
+            * 主题类别
+        **/
+        @JsonProperty("category")
+        @Valid
+        public String getCategory() {
+            return category;
+        }
+        public void setCategory(String category) {
+            this.category = category;
         }
     
         /**
@@ -88,7 +115,6 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("userId")
         @Valid
-        @NotNull
         public Long getUserId() {
             return userId;
         }
@@ -120,6 +146,18 @@ import javax.validation.constraints.*;
             this.content = content;
         }
     
+        /**
+            * 主题标签
+        **/
+        @JsonProperty("labels")
+        @Valid
+        public List<String> getLabels() {
+            return labels;
+        }
+        public void setLabels(List<String> labels) {
+            this.labels = labels;
+        }
+    
 
         @Override
         public String toString()  {
@@ -129,11 +167,14 @@ import javax.validation.constraints.*;
             sb.append("  createdAt: ").append(createdAt).append("\n");
             sb.append("  modifiedAt: ").append(modifiedAt).append("\n");
             sb.append("  id: ").append(id).append("\n");
+            sb.append("  startupId: ").append(startupId).append("\n");
             sb.append("  title: ").append(title).append("\n");
             sb.append("  ctocoins: ").append(ctocoins).append("\n");
+            sb.append("  category: ").append(category).append("\n");
             sb.append("  userId: ").append(userId).append("\n");
             sb.append("  confirmed: ").append(confirmed).append("\n");
             sb.append("  content: ").append(content).append("\n");
+            sb.append("  labels: ").append(labels).append("\n");
             sb.append("}\n");
             return sb.toString();
         }

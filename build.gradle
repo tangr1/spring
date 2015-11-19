@@ -19,6 +19,13 @@ subprojects {
     apply plugin: "application"
     apply plugin: 'eclipse'
     apply plugin: 'idea'
+
+    configurations {
+        def excluded = ['slf4j-simple']
+        for (e in excluded) {
+            compile.exclude module: e
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {

@@ -14,13 +14,22 @@ import javax.validation.constraints.*;
     
         private Date createdAt = null;
         private String password = null;
-        private String role = null;
+        public enum RoleEnum {
+         ROOT,  ADMIN,  EMPLOYEE,  INTERNAL_EXPERT,  EXTERNAL_EXPERT, 
+        };
+        private RoleEnum role = null;
         private String phone = null;
         private Date modifiedAt = null;
+        private String inviteCode = null;
         private String name = null;
         private Long id = null;
         private Long startupId = null;
+        private Integer ctocoins = null;
         private String email = null;
+        public enum StatusEnum {
+         NEW,  REVIEWING,  REJECTED,  APPROVED,  DELETED, 
+        };
+        private StatusEnum status = null;
 
     
         /**
@@ -52,10 +61,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("role")
         @Valid
-        public String getRole() {
+        public RoleEnum getRole() {
             return role;
         }
-        public void setRole(String role) {
+        public void setRole(RoleEnum role) {
             this.role = role;
         }
     
@@ -84,11 +93,22 @@ import javax.validation.constraints.*;
         }
     
         /**
+            * 使用的邀请码
+        **/
+        @JsonProperty("inviteCode")
+        @Valid
+        public String getInviteCode() {
+            return inviteCode;
+        }
+        public void setInviteCode(String inviteCode) {
+            this.inviteCode = inviteCode;
+        }
+    
+        /**
             * 用户姓名
         **/
         @JsonProperty("name")
         @Valid
-        @NotNull
         public String getName() {
             return name;
         }
@@ -121,6 +141,18 @@ import javax.validation.constraints.*;
         }
     
         /**
+            * 拥有的悬赏分
+        **/
+        @JsonProperty("ctocoins")
+        @Valid
+        public Integer getCtocoins() {
+            return ctocoins;
+        }
+        public void setCtocoins(Integer ctocoins) {
+            this.ctocoins = ctocoins;
+        }
+    
+        /**
             * 用户邮件地址
         **/
         @JsonProperty("email")
@@ -130,6 +162,18 @@ import javax.validation.constraints.*;
         }
         public void setEmail(String email) {
             this.email = email;
+        }
+    
+        /**
+            * 用户状态
+        **/
+        @JsonProperty("status")
+        @Valid
+        public StatusEnum getStatus() {
+            return status;
+        }
+        public void setStatus(StatusEnum status) {
+            this.status = status;
         }
     
 
@@ -143,10 +187,13 @@ import javax.validation.constraints.*;
             sb.append("  role: ").append(role).append("\n");
             sb.append("  phone: ").append(phone).append("\n");
             sb.append("  modifiedAt: ").append(modifiedAt).append("\n");
+            sb.append("  inviteCode: ").append(inviteCode).append("\n");
             sb.append("  name: ").append(name).append("\n");
             sb.append("  id: ").append(id).append("\n");
             sb.append("  startupId: ").append(startupId).append("\n");
+            sb.append("  ctocoins: ").append(ctocoins).append("\n");
             sb.append("  email: ").append(email).append("\n");
+            sb.append("  status: ").append(status).append("\n");
             sb.append("}\n");
             return sb.toString();
         }

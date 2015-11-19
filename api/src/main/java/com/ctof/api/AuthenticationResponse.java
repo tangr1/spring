@@ -11,8 +11,21 @@ import javax.validation.constraints.*;
     **/
     public class AuthenticationResponse  {
     
+        private String expiresIn = null;
         private String token = null;
 
+    
+        /**
+            * token失效时间
+        **/
+        @JsonProperty("expiresIn")
+        @Valid
+        public String getExpiresIn() {
+            return expiresIn;
+        }
+        public void setExpiresIn(String expiresIn) {
+            this.expiresIn = expiresIn;
+        }
     
         /**
             * 访问token
@@ -32,6 +45,7 @@ import javax.validation.constraints.*;
             StringBuilder sb = new StringBuilder();
             sb.append("class AuthenticationResponse {\n");
             
+            sb.append("  expiresIn: ").append(expiresIn).append("\n");
             sb.append("  token: ").append(token).append("\n");
             sb.append("}\n");
             return sb.toString();

@@ -1,1 +1,1 @@
-include 'codegen', 'server'
+include 'api', 'server'

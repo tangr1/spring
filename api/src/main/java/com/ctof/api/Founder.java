@@ -63,7 +63,6 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("name")
         @Valid
-        @NotNull
         public String getName() {
             return name;
         }

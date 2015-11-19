@@ -1,9 +1,3 @@
-/*
- * *****************************************************
- *  Copyright VMware, Inc. 2014.   All Rights Reserved.
- *  ******************************************************
- */
-
 package com.ctof.server.config.time;
 
 import com.fasterxml.jackson.core.JsonParser;
