@@ -1,7 +1,7 @@
 package com.ctof.server.controller;
 
-import com.ctof.api.CreateCommentRequest;
 import com.ctof.api.Comment;
+import com.ctof.api.CreateCommentRequest;
 import com.ctof.api.UpdateCommentRequest;
 import com.ctof.server.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;

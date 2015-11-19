@@ -24,8 +24,17 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Page<Topic> list(Pageable pageable) {
-        Page<TopicModel> topicModels =  repo.findAll(pageable);
-        Type pageType = new TypeToken<Page<Topic>>() {}.getType();
+        Page<TopicModel> topicModels = repo.findAll(pageable);
+        Type pageType = new TypeToken<Page<Topic>>() {
+        }.getType();
+        return mapper.map(topicModels, pageType);
+    }
+
+    @Override
+    public Page<Topic> listByStartupId(Long startupId, Pageable pageable) {
+        Page<TopicModel> topicModels = repo.findByStartupId(startupId, pageable);
+        Type pageType = new TypeToken<Page<Topic>>() {
+        }.getType();
         return mapper.map(topicModels, pageType);
     }
 

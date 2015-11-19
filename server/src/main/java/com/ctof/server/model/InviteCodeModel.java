@@ -6,12 +6,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "invitecodes")
 public class InviteCodeModel extends BaseModel {
-    @NotNull
     private Type type;
     private String code;
     private Integer quota;
     private Integer used;
     private Long inviterId;
+    private Long startupId;
 
     public Long getStartupId() {
         return startupId;
@@ -20,8 +20,6 @@ public class InviteCodeModel extends BaseModel {
     public void setStartupId(Long startupId) {
         this.startupId = startupId;
     }
-
-    private Long startupId;
 
     @Column
     @Enumerated(EnumType.STRING)

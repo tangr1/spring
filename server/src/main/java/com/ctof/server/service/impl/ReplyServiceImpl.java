@@ -24,8 +24,9 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public Page<Reply> list(Pageable pageable) {
-        Page<ReplyModel> replyModels =  repo.findAll(pageable);
-        Type pageType = new TypeToken<Page<Reply>>() {}.getType();
+        Page<ReplyModel> replyModels = repo.findAll(pageable);
+        Type pageType = new TypeToken<Page<Reply>>() {
+        }.getType();
         return mapper.map(replyModels, pageType);
     }
 

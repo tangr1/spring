@@ -12,13 +12,20 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "topics")
 public class TopicModel extends BaseModel {
-    @NotNull
     private Long userId = null;
-    @NotNull
+
+    public Long getStartupId() {
+        return startupId;
+    }
+
+    public void setStartupId(Long startupId) {
+        this.startupId = startupId;
+    }
+
+    private Long startupId = null;
     private String title = null;
     private String content = null;
     private String category = null;
-    @Min(10)
     private Long ctocoins = null;
     private Boolean confirmed = null;
     private String[] labels = null;

@@ -1,7 +1,7 @@
 package com.ctof.server.service.impl;
 
-import com.ctof.api.CreateCommentRequest;
 import com.ctof.api.Comment;
+import com.ctof.api.CreateCommentRequest;
 import com.ctof.api.UpdateCommentRequest;
 import com.ctof.server.model.CommentModel;
 import com.ctof.server.repository.CommentRepository;
@@ -24,8 +24,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<Comment> list(Pageable pageable) {
-        Page<CommentModel> commentModels =  repo.findAll(pageable);
-        Type pageType = new TypeToken<Page<Comment>>() {}.getType();
+        Page<CommentModel> commentModels = repo.findAll(pageable);
+        Type pageType = new TypeToken<Page<Comment>>() {
+        }.getType();
         return mapper.map(commentModels, pageType);
     }
 

@@ -1,12 +1,13 @@
 package com.ctof.server.controller;
 
 import com.ctof.api.CreateUserRequest;
-import com.ctof.api.User;
 import com.ctof.api.UpdateUserRequest;
+import com.ctof.api.User;
 import com.ctof.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,16 @@ public class UserController {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseBody
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROOT')")
     public Page<User> list(
             final @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-            final @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize) {
-        return userService.list(new PageRequest(page - 1, pageSize));
+            final @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+            final @RequestParam(value = "startupid", required = false) Long startupId) {
+        if (startupId != null) {
+            return userService.listByStartupId(startupId, new PageRequest(page - 1, pageSize));
+        } else {
+            return userService.list(new PageRequest(page - 1, pageSize));
+        }
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)

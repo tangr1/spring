@@ -11,10 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 @CacheConfig(cacheNames = "topics")
 public interface TopicRepository extends PagingAndSortingRepository<TopicModel, Long> {
+    @Cacheable
     Page<TopicModel> findByCategory(String category, Pageable pageable);
 
     @Cacheable
     Page<TopicModel> findByUserId(Long userId, Pageable pageable);
 
+    @Cacheable
+    Page<TopicModel> findByStartupId(Long startupId, Pageable pageable);
+
+    @Cacheable
     Page<TopicModel> findByUserIdAndCategory(Long userId, String category, Pageable pageable);
 }

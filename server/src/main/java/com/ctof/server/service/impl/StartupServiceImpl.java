@@ -1,8 +1,8 @@
 package com.ctof.server.service.impl;
 
 import com.ctof.api.CreateStartupRequest;
-import com.ctof.api.UpdateStartupRequest;
 import com.ctof.api.Startup;
+import com.ctof.api.UpdateStartupRequest;
 import com.ctof.server.model.StartupModel;
 import com.ctof.server.repository.StartupRepository;
 import com.ctof.server.service.StartupService;
@@ -24,8 +24,9 @@ public class StartupServiceImpl implements StartupService {
 
     @Override
     public Page<Startup> list(Pageable pageable) {
-        Page<StartupModel> startupModels =  repo.findAll(pageable);
-        Type pageType = new TypeToken<Page<Startup>>() {}.getType();
+        Page<StartupModel> startupModels = repo.findAll(pageable);
+        Type pageType = new TypeToken<Page<Startup>>() {
+        }.getType();
         return mapper.map(startupModels, pageType);
     }
 

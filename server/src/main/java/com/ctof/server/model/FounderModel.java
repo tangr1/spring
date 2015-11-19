@@ -8,12 +8,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "founders")
 public class FounderModel extends BaseModel {
-    @NotNull
     private String name;
     private String position;
     private String email;
     private String intro;
-    @NotNull
     private Long startupId;
 
     @Column

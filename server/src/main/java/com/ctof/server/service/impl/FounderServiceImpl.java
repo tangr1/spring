@@ -24,8 +24,9 @@ public class FounderServiceImpl implements FounderService {
 
     @Override
     public Page<Founder> list(Pageable pageable) {
-        Page<FounderModel> founderModels =  repo.findAll(pageable);
-        Type pageType = new TypeToken<Page<Founder>>() {}.getType();
+        Page<FounderModel> founderModels = repo.findAll(pageable);
+        Type pageType = new TypeToken<Page<Founder>>() {
+        }.getType();
         return mapper.map(founderModels, pageType);
     }
 

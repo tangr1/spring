@@ -27,8 +27,13 @@ public class TopicController {
     @Transactional(readOnly = true)
     public Page<Topic> list(
             final @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-            final @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize) {
-        return topicService.list(new PageRequest(page - 1, pageSize));
+            final @RequestParam(value = "pagesize", required = false, defaultValue = "20") Integer pageSize,
+            final @RequestParam(value = "startupid", required = false) Long startupId) {
+        if (startupId != null) {
+            return topicService.listByStartupId(startupId, new PageRequest(page - 1, pageSize));
+        } else {
+            return topicService.list(new PageRequest(page - 1, pageSize));
+        }
     }
 
     @RequestMapping(value = "/topics/{id}", method = RequestMethod.GET)

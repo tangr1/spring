@@ -8,8 +8,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface TopicService {
     Page<Topic> list(Pageable pageable);
+
+    Page<Topic> listByStartupId(Long startupId, Pageable pageable);
+
     Topic create(CreateTopicRequest request);
+
     Topic get(Long id);
+
     Topic update(Long id, UpdateTopicRequest request);
+
     void delete(Long id);
 }

@@ -6,9 +6,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "users")
 public class UserModel extends BaseModel {
-    @NotNull
     private String name;
-    @NotNull
     private String password;
     private String email;
     private String phone;

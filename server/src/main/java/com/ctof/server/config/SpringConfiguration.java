@@ -3,7 +3,6 @@ package com.ctof.server.config;
 import com.ctof.server.interceptor.AuthInterceptor;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import org.modelmapper.ModelMapper;

@@ -1,8 +1,8 @@
 package com.ctof.server.controller;
 
 import com.ctof.api.CreateFounderRequest;
-import com.ctof.api.UpdateFounderRequest;
 import com.ctof.api.Founder;
+import com.ctof.api.UpdateFounderRequest;
 import com.ctof.server.service.FounderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

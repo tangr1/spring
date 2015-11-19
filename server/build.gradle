@@ -2,7 +2,7 @@ apply plugin: 'spring-boot'
 
 jar {
     baseName = 'ctof-server'
-    version =  '0.0.1'
+    version = '0.0.1'
 }
 
 dependencies {
