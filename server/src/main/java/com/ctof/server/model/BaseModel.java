@@ -1,27 +1,25 @@
 package com.ctof.server.model;
 
-import com.ctof.server.model.converter.DateToDateTimeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @MappedSuperclass
 public abstract class BaseModel {
     protected Long id;
-    protected DateTime createTime;
-    protected DateTime modifyTime;
+    protected Date createdAt;
+    protected Date modifiedAt;
 
     @PrePersist
     public void prePersist() {
-        DateTime now = DateTime.now();
-        this.createTime = now;
-        this.modifyTime = now;
+        this.createdAt = new Date();
+        this.modifiedAt = new Date();
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifyTime = DateTime.now();
+        this.modifiedAt = new Date();
     }
 
     @Id
@@ -35,24 +33,22 @@ public abstract class BaseModel {
     }
 
     @Column(name = "created_at")
-    @Convert(converter = DateToDateTimeConverter.class)
     @JsonIgnore
-    public DateTime getCreateTime() {
-        return createTime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateTime(DateTime createTime) {
-        this.createTime = createTime;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Column(name = "modified_at")
-    @Convert(converter = DateToDateTimeConverter.class)
     @JsonIgnore
-    public DateTime getModifyTime() {
-        return modifyTime;
+    public Date getModifiedAt() {
+        return modifiedAt;
     }
 
-    public void setModifyTime(DateTime modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setModifiedAt(Date modifiedAt) {
+        this.modifiedAt = modifiedAt;
     }
 }
