@@ -12,14 +12,14 @@ import javax.validation.constraints.*;
     **/
     public class User  {
     
-        private Date createdAt = null;
+        private java.time.LocalDateTime createdAt = null;
         private String password = null;
         public enum RoleEnum {
          ROOT,  ADMIN,  EMPLOYEE,  INTERNAL_EXPERT,  EXTERNAL_EXPERT, 
         };
         private RoleEnum role = null;
         private String phone = null;
-        private Date modifiedAt = null;
+        private java.time.LocalDateTime modifiedAt = null;
         private String inviteCode = null;
         private String name = null;
         private Long id = null;
@@ -37,10 +37,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("createdAt")
         @Valid
-        public Date getCreatedAt() {
+        public java.time.LocalDateTime getCreatedAt() {
             return createdAt;
         }
-        public void setCreatedAt(Date createdAt) {
+        public void setCreatedAt(java.time.LocalDateTime createdAt) {
             this.createdAt = createdAt;
         }
     
@@ -85,10 +85,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("modifiedAt")
         @Valid
-        public Date getModifiedAt() {
+        public java.time.LocalDateTime getModifiedAt() {
             return modifiedAt;
         }
-        public void setModifiedAt(Date modifiedAt) {
+        public void setModifiedAt(java.time.LocalDateTime modifiedAt) {
             this.modifiedAt = modifiedAt;
         }
     

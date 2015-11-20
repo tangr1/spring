@@ -1,14 +1,16 @@
 package com.ctof.server.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import java.time.LocalDateTime;
 
 public interface TokenService {
 
-    String getUsernameFromToken(String token);
+    String getEmailFromToken(String token);
 
-    String generateToken(UserDetails userDetails);
+    String generateToken(String email, LocalDateTime expiration);
 
-    boolean validateToken(String token, UserDetails userDetails);
+    boolean validateToken(String token, String email);
 
-    void refreshToken(String token);
+    void refreshToken(String token, LocalDateTime expiration);
+
+    void invalidateToken(String token);
 }

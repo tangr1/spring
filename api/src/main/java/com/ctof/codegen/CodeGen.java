@@ -4,6 +4,7 @@ import io.swagger.codegen.CodegenConfig;
 import io.swagger.codegen.CodegenType;
 import io.swagger.codegen.DefaultCodegen;
 import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 
@@ -154,6 +155,8 @@ public class CodeGen extends DefaultCodegen implements CodegenConfig {
             MapProperty mp = (MapProperty) p;
             Property inner = mp.getAdditionalProperties();
             return getSwaggerType(p) + "<String, " + getTypeDeclaration(inner) + ">";
+        } else if (p instanceof DateTimeProperty) {
+            return "java.time.LocalDateTime";
         }
         return super.getTypeDeclaration(p);
     }

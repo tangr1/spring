@@ -12,7 +12,7 @@ public class ReplyModel extends BaseModel {
     private String title;
     private String content;
 
-    @Column
+    @Column(name = "topic_id")
     public Long getTopicId() {
         return topicId;
     }
@@ -21,7 +21,7 @@ public class ReplyModel extends BaseModel {
         this.topicId = topicId;
     }
 
-    @Column
+    @Column(name = "user_id")
     public Long getUserId() {
         return userId;
     }

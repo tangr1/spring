@@ -12,9 +12,9 @@ import javax.validation.constraints.*;
     **/
     public class Reply  {
     
-        private Date createdAt = null;
+        private java.time.LocalDateTime createdAt = null;
         private Long topicId = null;
-        private Date modifiedAt = null;
+        private java.time.LocalDateTime modifiedAt = null;
         private Long id = null;
         private String title = null;
         private Long userId = null;
@@ -26,10 +26,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("createdAt")
         @Valid
-        public Date getCreatedAt() {
+        public java.time.LocalDateTime getCreatedAt() {
             return createdAt;
         }
-        public void setCreatedAt(Date createdAt) {
+        public void setCreatedAt(java.time.LocalDateTime createdAt) {
             this.createdAt = createdAt;
         }
     
@@ -50,10 +50,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("modifiedAt")
         @Valid
-        public Date getModifiedAt() {
+        public java.time.LocalDateTime getModifiedAt() {
             return modifiedAt;
         }
-        public void setModifiedAt(Date modifiedAt) {
+        public void setModifiedAt(java.time.LocalDateTime modifiedAt) {
             this.modifiedAt = modifiedAt;
         }
     

@@ -1,5 +1,7 @@
 package com.ctof.api;
 
+import com.ctof.api.User;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
@@ -11,7 +13,8 @@ import javax.validation.constraints.*;
     **/
     public class AuthenticationResponse  {
     
-        private String expiresIn = null;
+        private java.time.LocalDateTime expiresIn = null;
+        private User user = null;
         private String token = null;
 
     
@@ -20,11 +23,23 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("expiresIn")
         @Valid
-        public String getExpiresIn() {
+        public java.time.LocalDateTime getExpiresIn() {
             return expiresIn;
         }
-        public void setExpiresIn(String expiresIn) {
+        public void setExpiresIn(java.time.LocalDateTime expiresIn) {
             this.expiresIn = expiresIn;
+        }
+    
+        /**
+            * 用户信息
+        **/
+        @JsonProperty("user")
+        @Valid
+        public User getUser() {
+            return user;
+        }
+        public void setUser(User user) {
+            this.user = user;
         }
     
         /**
@@ -46,6 +61,7 @@ import javax.validation.constraints.*;
             sb.append("class AuthenticationResponse {\n");
             
             sb.append("  expiresIn: ").append(expiresIn).append("\n");
+            sb.append("  user: ").append(user).append("\n");
             sb.append("  token: ").append(token).append("\n");
             sb.append("}\n");
             return sb.toString();

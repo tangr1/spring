@@ -3,7 +3,6 @@ package com.ctof.server.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "founders")
@@ -32,7 +31,7 @@ public class FounderModel extends BaseModel {
         this.intro = intro;
     }
 
-    @Column
+    @Column(name = "startup_id")
     public Long getStartupId() {
         return startupId;
     }

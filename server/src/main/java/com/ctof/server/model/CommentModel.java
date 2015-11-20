@@ -12,7 +12,7 @@ public class CommentModel extends BaseModel {
     private Long topicId;
     private String content;
 
-    @Column
+    @Column(name = "topic_id")
     public Long getTopicId() {
         return topicId;
     }
@@ -21,7 +21,7 @@ public class CommentModel extends BaseModel {
         this.topicId = topicId;
     }
 
-    @Column
+    @Column(name = "reply_id")
     public Long getReplyId() {
         return replyId;
     }
@@ -30,7 +30,7 @@ public class CommentModel extends BaseModel {
         this.replyId = replyId;
     }
 
-    @Column
+    @Column(name = "user_id")
     public Long getUserId() {
         return userId;
     }

@@ -42,7 +42,7 @@ securityDefinitions:
 security:
   - token: []
 paths:
-  /login/:
+  /auth/login/:
     post:
       summary: 用户登录
       description: |
@@ -65,7 +65,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /logout/:
+  /auth/logout/:
     post:
       summary: 用户登出
       description: |
@@ -80,7 +80,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /refresh/:
+  /auth/refresh/:
     post:
       summary: 刷新token
       description: |
@@ -95,7 +95,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /forgotpassword/{email}:
+  /auth/forgotpassword/{email}:
     post:
       summary: 忘记密码
       description: |
@@ -110,7 +110,7 @@ paths:
           type: string
       responses:
         200:
-          description: 生成含token的软件并发送给用户邮件
+          description: 生成含token的短链并发送给用户邮件
 
   /sendmail/:
     post:
@@ -1052,7 +1052,7 @@ definitions:
       password:
         description: 密码，需加密，不可明文传输
         type: string
-      expiredTime:
+      expiration:
         description: token失效时间, 单位为分钟
         type: integer
 
@@ -1063,9 +1063,13 @@ definitions:
       token:
         description: 访问token
         type: string
+      user:
+        description: 用户信息
+        $ref: User
       expiresIn:
         description: token失效时间
         type: string
+        format: date-time
 
   PagableResult:
     description: 资源列表的一页结果
@@ -1280,6 +1284,11 @@ definitions:
         description: 创业公司管理员ID
         type: integer
         format: int64
+      founders:
+        description: 创始人
+        type: array
+        items:
+          $ref: Founder
       createdAt:
         description: 创建时间
         type: string

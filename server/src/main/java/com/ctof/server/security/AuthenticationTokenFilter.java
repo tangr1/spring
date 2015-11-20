@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-    @Value("${app.token.header}")
+    @Value("${application.token.header}")
     private String tokenHeader;
 
     @Autowired
@@ -33,11 +33,11 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authToken = httpRequest.getHeader(tokenHeader);
-        String username = this.tokenService.getUsernameFromToken(authToken);
+        String email = this.tokenService.getEmailFromToken(authToken);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (this.tokenService.validateToken(authToken, userDetails)) {
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+            if (this.tokenService.validateToken(authToken, email)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

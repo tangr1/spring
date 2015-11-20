@@ -1,25 +1,24 @@
 package com.ctof.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class BaseModel {
     protected Long id;
-    protected Date createdAt;
-    protected Date modifiedAt;
+    protected LocalDateTime createdAt;
+    protected LocalDateTime modifiedAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = new Date();
-        this.modifiedAt = new Date();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        this.createdAt = localDateTime;
+        this.modifiedAt = localDateTime;
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedAt = new Date();
+        this.modifiedAt = LocalDateTime.now();
     }
 
     @Id
@@ -33,22 +32,20 @@ public abstract class BaseModel {
     }
 
     @Column(name = "created_at")
-    @JsonIgnore
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
     @Column(name = "modified_at")
-    @JsonIgnore
-    public Date getModifiedAt() {
+    public LocalDateTime getModifiedAt() {
         return modifiedAt;
     }
 
-    public void setModifiedAt(Date modifiedAt) {
+    public void setModifiedAt(LocalDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 }

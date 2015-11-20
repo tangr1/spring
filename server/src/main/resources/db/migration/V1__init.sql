@@ -8,7 +8,7 @@ CREATE TABLE `topics` (
   `title`       VARCHAR(255) NOT NULL,
   `labels`      VARCHAR(255) NOT NULL,
   `user_id`     BIGINT(20)   NOT NULL,
-  `startup_id`     BIGINT(20)   NOT NULL,
+  `startup_id`  BIGINT(20)   NOT NULL,
   `created_at`  DATETIME              DEFAULT NULL,
   `modified_at` DATETIME              DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -43,33 +43,33 @@ CREATE TABLE `replies` (
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE `invitecodes` (
-  `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT,
-  `code`        VARCHAR(64)           DEFAULT NULL,
-  `type`        VARCHAR(64)  NOT NULL,
-  `inviter_id`  BIGINT(20)            DEFAULT NULL,
-  `startup_id`  BIGINT(20)            DEFAULT NULL,
-  `quota`       INT(11)               DEFAULT NULL,
-  `used`        INT(11)               DEFAULT NULL,
-  `created_at`  DATETIME              DEFAULT NULL,
-  `modified_at` DATETIME              DEFAULT NULL,
+  `id`          BIGINT(20)  NOT NULL AUTO_INCREMENT,
+  `code`        VARCHAR(64)          DEFAULT NULL,
+  `type`        VARCHAR(64) NOT NULL,
+  `inviter_id`  BIGINT(20)           DEFAULT NULL,
+  `startup_id`  BIGINT(20)           DEFAULT NULL,
+  `quota`       INT(11)              DEFAULT NULL,
+  `used`        INT(11)              DEFAULT NULL,
+  `created_at`  DATETIME             DEFAULT NULL,
+  `modified_at` DATETIME             DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE `users` (
-  `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT,
-  `email`       VARCHAR(64)           DEFAULT NULL,
-  `name`        VARCHAR(255) NOT NULL,
-  `password`    VARCHAR(255) NOT NULL,
-  `phone`       VARCHAR(64)           DEFAULT NULL,
-  `role`        VARCHAR(64)           DEFAULT NULL,
-  `ctocoins`    BIGINT(20)            DEFAULT NULL,
-  `invitecode_id`  BIGINT(20)         DEFAULT NULL,
-  `status`      VARCHAR(64)           DEFAULT NULL,
-  `startup_id`  BIGINT(20)            DEFAULT NULL,
-  `created_at`  DATETIME              DEFAULT NULL,
-  `modified_at` DATETIME              DEFAULT NULL,
+  `id`            BIGINT(20)   NOT NULL AUTO_INCREMENT,
+  `email`         VARCHAR(64)           DEFAULT NULL,
+  `name`          VARCHAR(255) NOT NULL,
+  `password`      VARCHAR(255) NOT NULL,
+  `phone`         VARCHAR(64)           DEFAULT NULL,
+  `role`          VARCHAR(64)           DEFAULT NULL,
+  `ctocoins`      BIGINT(20)            DEFAULT NULL,
+  `invitecode_id` BIGINT(20)            DEFAULT NULL,
+  `status`        VARCHAR(64)           DEFAULT NULL,
+  `startup_id`    BIGINT(20)            DEFAULT NULL,
+  `created_at`    DATETIME              DEFAULT NULL,
+  `modified_at`   DATETIME              DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -112,4 +112,5 @@ CREATE TABLE `founders` (
   DEFAULT CHARSET = utf8;
 
 INSERT INTO users (name, email, password, role, created_at, modified_at)
-VALUES ('root', 'root@ctofunds.com', '$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC', 'ROOT', now(), now());
+VALUES
+  ('root', 'root@ctofunds.com', '$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC', 'ROOT', now(), now());

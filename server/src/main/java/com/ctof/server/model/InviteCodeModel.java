@@ -1,7 +1,6 @@
 package com.ctof.server.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "invitecodes")
@@ -13,6 +12,7 @@ public class InviteCodeModel extends BaseModel {
     private Long inviterId;
     private Long startupId;
 
+    @Column(name = "startup_id")
     public Long getStartupId() {
         return startupId;
     }
@@ -58,7 +58,7 @@ public class InviteCodeModel extends BaseModel {
         this.used = used;
     }
 
-    @Column
+    @Column(name = "inviter_id")
     public Long getInviterId() {
         return inviterId;
     }

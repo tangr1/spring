@@ -30,7 +30,7 @@ public class StartupModel extends BaseModel {
         this.status = status;
     }
 
-    @Column
+    @Column(name = "admin_id")
     public Long getAdminId() {
         return adminId;
     }
@@ -39,7 +39,7 @@ public class StartupModel extends BaseModel {
         this.adminId = adminId;
     }
 
-    @Column
+    @Column(name = "corp_name")
     public String getCorpName() {
         return corpName;
     }
@@ -48,7 +48,7 @@ public class StartupModel extends BaseModel {
         this.corpName = corpName;
     }
 
-    @Column
+    @Column(name = "start_year")
     public Integer getStartYear() {
         return startYear;
     }
@@ -57,7 +57,7 @@ public class StartupModel extends BaseModel {
         this.startYear = startYear;
     }
 
-    @Column
+    @Column(name = "start_month")
     public Integer getStartMonth() {
         return startMonth;
     }
@@ -66,7 +66,7 @@ public class StartupModel extends BaseModel {
         this.startMonth = startMonth;
     }
 
-    @Column
+    @Column(name = "product_name")
     public String getProductName() {
         return productName;
     }
@@ -75,7 +75,7 @@ public class StartupModel extends BaseModel {
         this.productName = productName;
     }
 
-    @Column
+    @Column(name = "product_desc")
     public String getProductDesc() {
         return productDesc;
     }
@@ -120,7 +120,7 @@ public class StartupModel extends BaseModel {
         this.intro = intro;
     }
 
-    @Column
+    @Column(name = "corp_id_photo")
     public String getCorpIdPhoto() {
         return corpIdPhoto;
     }

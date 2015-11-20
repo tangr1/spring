@@ -1,5 +1,7 @@
 package com.ctof.api;
 
+import java.util.*;
+import com.ctof.api.Founder;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,13 +16,14 @@ import javax.validation.constraints.*;
     
         private String phase = null;
         private Integer startMonth = null;
-        private Date modifiedAt = null;
+        private java.time.LocalDateTime modifiedAt = null;
         private String corpIdPhoto = null;
         private Integer startYear = null;
         private String corpName = null;
+        private List<Founder> founders = null;
         private String productName = null;
         private String productDesc = null;
-        private Date createdAt = null;
+        private java.time.LocalDateTime createdAt = null;
         private String scope = null;
         private String intro = null;
         private String name = null;
@@ -59,10 +62,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("modifiedAt")
         @Valid
-        public Date getModifiedAt() {
+        public java.time.LocalDateTime getModifiedAt() {
             return modifiedAt;
         }
-        public void setModifiedAt(Date modifiedAt) {
+        public void setModifiedAt(java.time.LocalDateTime modifiedAt) {
             this.modifiedAt = modifiedAt;
         }
     
@@ -103,6 +106,18 @@ import javax.validation.constraints.*;
         }
     
         /**
+            * 创始人
+        **/
+        @JsonProperty("founders")
+        @Valid
+        public List<Founder> getFounders() {
+            return founders;
+        }
+        public void setFounders(List<Founder> founders) {
+            this.founders = founders;
+        }
+    
+        /**
             * 创业公司产品名称
         **/
         @JsonProperty("productName")
@@ -131,10 +146,10 @@ import javax.validation.constraints.*;
         **/
         @JsonProperty("createdAt")
         @Valid
-        public Date getCreatedAt() {
+        public java.time.LocalDateTime getCreatedAt() {
             return createdAt;
         }
-        public void setCreatedAt(Date createdAt) {
+        public void setCreatedAt(java.time.LocalDateTime createdAt) {
             this.createdAt = createdAt;
         }
     
@@ -234,6 +249,7 @@ import javax.validation.constraints.*;
             sb.append("  corpIdPhoto: ").append(corpIdPhoto).append("\n");
             sb.append("  startYear: ").append(startYear).append("\n");
             sb.append("  corpName: ").append(corpName).append("\n");
+            sb.append("  founders: ").append(founders).append("\n");
             sb.append("  productName: ").append(productName).append("\n");
             sb.append("  productDesc: ").append(productDesc).append("\n");
             sb.append("  createdAt: ").append(createdAt).append("\n");

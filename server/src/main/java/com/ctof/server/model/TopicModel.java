@@ -6,22 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "topics")
 public class TopicModel extends BaseModel {
     private Long userId = null;
-
-    public Long getStartupId() {
-        return startupId;
-    }
-
-    public void setStartupId(Long startupId) {
-        this.startupId = startupId;
-    }
-
     private Long startupId = null;
     private String title = null;
     private String content = null;
@@ -29,6 +18,15 @@ public class TopicModel extends BaseModel {
     private Long ctocoins = null;
     private Boolean confirmed = null;
     private String[] labels = null;
+
+    @Column(name = "startup_id")
+    public Long getStartupId() {
+        return startupId;
+    }
+
+    public void setStartupId(Long startupId) {
+        this.startupId = startupId;
+    }
 
     @Column
     public Boolean getConfirmed() {
@@ -66,7 +64,7 @@ public class TopicModel extends BaseModel {
         this.ctocoins = ctocoins;
     }
 
-    @Column
+    @Column(name = "user_id")
     public Long getUserId() {
         return userId;
     }

@@ -7,7 +7,6 @@ import com.ctof.server.exception.NotFoundException;
 import com.ctof.server.model.UserModel;
 import com.ctof.server.repository.UserRepository;
 import com.ctof.server.service.UserService;
-import org.hibernate.annotations.NotFound;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,16 @@ public class UserServiceImpl implements UserService {
         if (userModel == null) {
             throw new NotFoundException();
         }
-        return mapper.map(repo.findOne(id), User.class);
+        return mapper.map(userModel, User.class);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        UserModel userModel = repo.findByEmail(email);
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+        return mapper.map(userModel, User.class);
     }
 
     @Override

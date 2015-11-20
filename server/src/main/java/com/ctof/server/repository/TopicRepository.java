@@ -6,9 +6,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @CacheConfig(cacheNames = "topics")
 public interface TopicRepository extends PagingAndSortingRepository<TopicModel, Long> {
     @Cacheable

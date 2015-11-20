@@ -1,7 +1,6 @@
 package com.ctof.server.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -34,7 +33,7 @@ public class UserModel extends BaseModel {
         this.role = role;
     }
 
-    @Column
+    @Column(name = "startup_id")
     public Long getStartupId() {
         return startupId;
     }

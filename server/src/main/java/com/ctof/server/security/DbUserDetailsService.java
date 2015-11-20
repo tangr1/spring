@@ -1,7 +1,7 @@
 package com.ctof.server.security;
 
-import com.ctof.server.model.UserModel;
-import com.ctof.server.repository.UserRepository;
+import com.ctof.api.User;
+import com.ctof.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 public class DbUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserModel userModel = userRepository.findByEmail(email);
+        User user = userService.getByEmail(email);
 
-        if (userModel == null) {
+        if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
         } else {
             return new SecureUser(
-                    userModel.getId(),
-                    userModel.getEmail(),
-                    userModel.getPassword(),
-                    AuthorityUtils.commaSeparatedStringToAuthorityList(userModel.getRole().toString())
+                    user.getId(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole().toString())
             );
         }
     }

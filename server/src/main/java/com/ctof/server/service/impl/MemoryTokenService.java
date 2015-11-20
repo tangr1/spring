@@ -5,45 +5,55 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Service
-@Profile("dev")
+@Profile({"test"})
 public class MemoryTokenService implements TokenService {
 
-    @Value("${app.token.secret}")
+    @Value("${application.token.secret}")
     private String secret;
 
     @Override
-    public String getUsernameFromToken(String token) {
-        String username;
+    public String getEmailFromToken(String token) {
+        String email;
         try {
-            username = Jwts.parser()
+            email = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
         } catch (Exception e) {
-            username = null;
+            email = null;
         }
-        return username;
+        return email;
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String email, LocalDateTime expiration) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .setSubject(email)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(Date.from(expiration.atZone(ZoneId.of("UTC")).toInstant()))
                 .compact();
     }
 
     @Override
-    public boolean validateToken(String token, UserDetails userDetails) {
-        return (getUsernameFromToken(token).equals(userDetails.getUsername()));
+    public boolean validateToken(String token, String email) {
+        return (getEmailFromToken(token).equals(email));
     }
 
+    // Memory token cannot be refreshed
     @Override
-    public void refreshToken(String token) {
+    public void refreshToken(String token, LocalDateTime expiration) {
+    }
+
+    // Memory token cannot be invalidated
+    @Override
+    public void invalidateToken(String token) {
     }
 }

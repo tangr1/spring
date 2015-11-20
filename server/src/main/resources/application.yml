@@ -2,6 +2,7 @@ spring:
   profiles.active: dev
 
 ---
+
 spring:
   profiles: dev
   datasource:
@@ -12,14 +13,19 @@ spring:
   jpa:
     show-sql: true
   jackson.serialization.INDENT_OUTPUT: true
+  redis:
+    host: 192.168.99.100
 server:
   port: 8090
   context-path: /api/v1
 
 #logging.level.org.springframework.web: DEBUG
 
-app.token.header: X-Auth-Token
-app.token.secret: ca$hc0w1!
+application:
+  token:
+    header: X-Auth-Token
+    secret: ca$hc0w1!
+    default-expiration: 15 # minutes
 
 ---
 spring:
@@ -34,5 +40,8 @@ server:
   port: 8090
   context-path: /api/v1
 
-app.token.header: X-Auth-Token
-app.token.secret: ca$hc0w1!
+application:
+  token:
+    header: X-Auth-Token
+    secret: ca$hc0w1!
+    default-expiration: 15 # minutes
